@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <>
     <Layout>
-      <h1>홈 입니다</h1>
+      <h1></h1>
     </Layout>
     </>
   );
