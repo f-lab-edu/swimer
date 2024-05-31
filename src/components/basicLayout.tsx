@@ -1,12 +1,37 @@
+'use client'
+
 import Header from './header';
 import Footer from './footer';
-import { Key, ReactNode, } from 'react';
+import React from 'react';
+import {useState, useEffect} from 'react';
+
+interface PublicSwimmingPool {
+    FACLT_NM: string;
+    SIGUN_NM: string;
+}
 
 export default function Layout({children}: {children: React.ReactNode;}) {
-    const datas = require('../lib/data.json')
+    const [data, setData] = useState<PublicSwimmingPool[]>([]);
+
+    useEffect(() => {
+        const requestType = "Type=json";
+        const requestKey = "KEY=9e860bd7d3ee4d129d3390efe28a172a";
+        const requestUrl = "https://openapi.gg.go.kr/PublicSwimmingPool?" + requestKey + "&" +  requestType;
+        
+        const fetchData = async () => {
+            const response = await fetch(requestUrl);
+            const responseData = await response.json();
+            const dataArray: PublicSwimmingPool[] = responseData.PublicSwimmingPool[1].row
+
+            setData(dataArray);
+        };
+
+        fetchData();
+
+    }, []);
 
     return (
-        <>
+        <>  
             <Header children={children}/>
             <section className="text-gray-600 body-font overflow-hidden">
                 <div className="container px-5 py-24 mx-auto max-w-screen-xl">
@@ -19,16 +44,12 @@ export default function Layout({children}: {children: React.ReactNode;}) {
                         </button>
                     </div>
                     <br/><br/>
-                    {datas?.map((data: { 
-                        id: Key; 
-                        name: string; 
-                        address: string;
-                    }) => (
-                    <div className="-my-8 divide-y-2 divide-gray-100" key={data.id}>
+                    {data.map((item, index) => (
+                    <div className="-my-8 divide-y-2 divide-gray-100" key={index}>
                     <div className="py-8 flex flex-wrap md:flex-nowrap">
                         <div className="md:flex-grow border-b-2 border-gray">
-                            <h2 className="font-semibold text-2xl font-medium text-gray-900 title-font mb-2">{data.name}</h2>
-                            <p className="leading-relaxed">{data.address}</p>
+                            <h2 className="font-semibold text-2xl font-medium text-gray-900 title-font mb-2">{item.FACLT_NM}</h2>
+                            <p className="leading-relaxed">{item.SIGUN_NM}</p>
                             <a className="text-blue-500 inline-flex items-center mt-4">Learn More
                                 <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none">
                                 <path d="M5 12h14"></path>
