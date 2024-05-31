@@ -2,8 +2,8 @@
 
 import Header from './header';
 import Footer from './footer';
-import React from 'react';
-import {useState, useEffect} from 'react';
+import Loading from './loading';
+import React, {useState, useEffect} from 'react';
 
 interface PublicSwimmingPool {
     FACLT_NM: string;
@@ -12,6 +12,7 @@ interface PublicSwimmingPool {
 
 export default function Layout({children}: {children: React.ReactNode;}) {
     const [data, setData] = useState<PublicSwimmingPool[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const requestType = "Type=json";
@@ -19,16 +20,27 @@ export default function Layout({children}: {children: React.ReactNode;}) {
         const requestUrl = "https://openapi.gg.go.kr/PublicSwimmingPool?" + requestKey + "&" +  requestType;
         
         const fetchData = async () => {
-            const response = await fetch(requestUrl);
-            const responseData = await response.json();
-            const dataArray: PublicSwimmingPool[] = responseData.PublicSwimmingPool[1].row
+            setLoading(true);
+            try{
+                const response = await fetch(requestUrl);
+                const responseData = await response.json();
+                const dataArray: PublicSwimmingPool[] = responseData.PublicSwimmingPool[1].row;
 
-            setData(dataArray);
+                setData(dataArray);
+            }catch(error){
+                console.error("fetching data 에러", error);
+            }finally{
+                setLoading(false);
+            }
         };
 
         fetchData();
 
     }, []);
+
+    if (loading) {
+        return <Loading />
+    }
 
     return (
         <>  
