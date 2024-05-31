@@ -3,6 +3,7 @@
 import Header from './header';
 import Footer from './footer';
 import Loading from './loading';
+import ErrorPage from './error';
 import React, {useState, useEffect} from 'react';
 
 interface PublicSwimmingPool {
@@ -13,6 +14,7 @@ interface PublicSwimmingPool {
 export default function Layout({children}: {children: React.ReactNode;}) {
     const [data, setData] = useState<PublicSwimmingPool[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const requestType = "Type=json";
@@ -23,12 +25,18 @@ export default function Layout({children}: {children: React.ReactNode;}) {
             setLoading(true);
             try{
                 const response = await fetch(requestUrl);
+
+                if (!response.ok) {
+                    throw new Error("응답 받기 실패");
+                }
+
                 const responseData = await response.json();
                 const dataArray: PublicSwimmingPool[] = responseData.PublicSwimmingPool[1].row;
 
                 setData(dataArray);
             }catch(error){
                 console.error("fetching data 에러", error);
+                setError("데이터를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.");
             }finally{
                 setLoading(false);
             }
@@ -56,6 +64,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
                         </button>
                     </div>
                     <br/><br/>
+                    {error && <ErrorPage message={error} />}
                     {data.map((item, index) => (
                     <div className="-my-8 divide-y-2 divide-gray-100" key={index}>
                     <div className="py-8 flex flex-wrap md:flex-nowrap">
