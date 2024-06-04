@@ -9,12 +9,17 @@ import React, {useState, useEffect} from 'react';
 interface PublicSwimmingPool {
     FACLT_NM: string;
     SIGUN_NM: string;
+    [key: string]: string;
 }
 
 export default function Layout({children}: {children: React.ReactNode;}) {
     const [data, setData] = useState<PublicSwimmingPool[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    const [searchResults, setSearchResults] = useState<PublicSwimmingPool[]>([]);
+    const [inputValue, setInputValue] = useState('');
+    const searchProperties = ["FACLT_NM", "SIGUN_NM"];
 
     useEffect(() => {
         const requestType = "Type=json";
@@ -50,22 +55,37 @@ export default function Layout({children}: {children: React.ReactNode;}) {
         return <Loading />
     }
 
+    function handleSearch(term: string) {
+        const allPool = data.map((item) => (
+            item
+        ));
+
+        const results = allPool.filter(pool =>
+            searchProperties.some(prop =>
+                pool[prop].replaceAll(" ", "").includes(term.replaceAll(" ", ""))
+            )
+        );
+        setInputValue(term);
+        setSearchResults(results);
+    }
+    
+    let searchList: PublicSwimmingPool[] = data;
+
+    if(inputValue !== ""){
+        searchList = searchResults;
+    }
+
     return (
         <>  
             <Header children={children}/>
             <section className="text-gray-600 body-font overflow-hidden">
                 <div className="container px-5 py-24 mx-auto max-w-screen-xl">
                     <div className="w-full bg-white shadow-md rounded-md flex items-center">
-                        <input type="text" placeholder="수영장 이름, 특정 지역 검색" className="w-full px-4 py-2 focus:outline-none rounded-md" />
-                        <button type="submit" className="flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                              <path d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                        </button>
+                        <input type="text" placeholder="수영장 이름, 특정 지역 검색" className="w-full px-4 py-2 focus:outline-none rounded-md" onChange={(e) => handleSearch(e.target.value)}/>
                     </div>
                     <br/><br/>
                     {error && <ErrorPage message={error} />}
-                    {data.map((item, index) => (
+                    {searchList.map((item, index) => (
                     <div className="-my-8 divide-y-2 divide-gray-100" key={index}>
                     <div className="py-8 flex flex-wrap md:flex-nowrap">
                         <div className="md:flex-grow border-b-2 border-gray">
