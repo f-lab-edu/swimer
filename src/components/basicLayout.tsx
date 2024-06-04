@@ -18,6 +18,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
     const [error, setError] = useState<string | null>(null);
 
     const [searchResults, setSearchResults] = useState<PublicSwimmingPool[]>([]);
+    const [inputValue, setInputValue] = useState('');
     const searchProperties = ["FACLT_NM", "SIGUN_NM"];
 
     useEffect(() => {
@@ -61,11 +62,17 @@ export default function Layout({children}: {children: React.ReactNode;}) {
 
         const results = allPool.filter(pool =>
             searchProperties.some(prop =>
-                pool[prop].toLowerCase().replaceAll(" ", "").includes(term.toLowerCase().replaceAll(" ", ""))
+                pool[prop].replaceAll(" ", "").includes(term.replaceAll(" ", ""))
             )
         );
-        
+        setInputValue(term);
         setSearchResults(results);
+    }
+    
+    let searchList: PublicSwimmingPool[] = data;
+
+    if(inputValue !== ""){
+        searchList = searchResults;
     }
 
     return (
@@ -78,7 +85,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
                     </div>
                     <br/><br/>
                     {error && <ErrorPage message={error} />}
-                    {searchResults.map((item, index) => (
+                    {searchList.map((item, index) => (
                     <div className="-my-8 divide-y-2 divide-gray-100" key={index}>
                     <div className="py-8 flex flex-wrap md:flex-nowrap">
                         <div className="md:flex-grow border-b-2 border-gray">
