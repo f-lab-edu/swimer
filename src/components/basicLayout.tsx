@@ -6,6 +6,8 @@ import Loading from './loading';
 import ErrorPage from './error';
 import React, {useState, useEffect} from 'react';
 
+import LinksButton from './button';
+
 interface PublicSwimmingPool {
     FACLT_NM: string;
     SIGUN_NM: string;
@@ -91,12 +93,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
                         <div className="md:flex-grow border-b-2 border-gray">
                             <h2 className="font-semibold text-2xl font-medium text-gray-900 title-font mb-2">{item.FACLT_NM}</h2>
                             <p className="leading-relaxed">{item.SIGUN_NM}</p>
-                            <a className="text-blue-500 inline-flex items-center mt-4">Learn More
-                                <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none">
-                                <path d="M5 12h14"></path>
-                                <path d="M12 5l7 7-7 7"></path>
-                                </svg>
-                            </a>
+                            <LinksButton />
                         </div>
                         <div className="flex items-center border-b-2 border-gray">
                         <a className="text-blue-500 inline-flex items-center">
