@@ -4,17 +4,8 @@ import Header from './header';
 import Footer from './footer';
 import React, {useState} from 'react';
 import Data from '../lib/requestdata';
-
-import LinksButton from './button';
-
-interface PublicSwimmingPool {
-    id: string;
-    FACLT_NM: string;
-    SIGUN_NM: string;
-    CONTCT_NO: string;
-    [key: string]: string;
-}
-
+import { PublicSwimmingPool } from '../lib/types';
+import { LinksButton, SaveVisitButton } from './button';
 
 export default function Layout({children}: {children: React.ReactNode;}) {
     const [data, setData] = useState<PublicSwimmingPool[]>([]);
@@ -67,11 +58,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
                             <LinksButton id={item.id}/>
                         </div>
                         <div className="flex items-center border-b-2 border-gray">
-                        <a className="text-blue-500 inline-flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                                <path d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13" />
-                            </svg>
-                        </a>
+                        <SaveVisitButton id={item.id}/>
                         </div>
                     </div>
                 </div>

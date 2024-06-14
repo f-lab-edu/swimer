@@ -1,7 +1,7 @@
 'use client'
 
-import Layout from "../../../components/detailLayout";
-import { usePath } from "../../../lib/utils";
+import Layout from "../../../components/writeLayout";
+import { usePath } from "../../../lib/utils"
 
 export default function Home() {
   return (
