@@ -4,18 +4,8 @@ import Header from './header';
 import Footer from './footer';
 import React, {useState} from 'react';
 import Data from '../lib/requestdata';
-
-
+import { PublicSwimmingPool } from '../lib/types';
 import { LinksButton, SaveVisitButton } from './button';
-
-interface PublicSwimmingPool {
-    id: string;
-    FACLT_NM: string;
-    SIGUN_NM: string;
-    CONTCT_NO: string;
-    [key: string]: string;
-}
-
 
 export default function Layout({children}: {children: React.ReactNode;}) {
     const [data, setData] = useState<PublicSwimmingPool[]>([]);

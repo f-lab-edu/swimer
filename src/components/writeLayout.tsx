@@ -2,17 +2,7 @@ import Header from './header';
 import Footer from './footer';
 import { useState } from 'react';
 import Data from '../lib/requestdata';
-
-interface PublicSwimmingPool {
-  id: string;
-  FACLT_NM: string;
-  SIGUN_NM: string;
-  CONTCT_NO: string;
-  HMPG_ADDR: string;
-  IRREGULR_RELYSWIMPL_LENG: string;
-  IRREGULR_RELYSWIMPL_LANE_CNT: string;
-  [key: string]: string;
-}
+import { PublicSwimmingPool } from '../lib/types';
 
 export default function Layout({children, id}: {children: React.ReactNode; id: string | undefined;}) {
   const [data, setData] = useState<PublicSwimmingPool[]>([]);

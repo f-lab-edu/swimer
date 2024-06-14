@@ -1,15 +1,12 @@
 'use client'
 
 import Layout from "../../../components/detailLayout";
-import { usePathname } from "next/navigation";
+import { usePath } from "../../../lib/utils";
 
 export default function Home() {
-  const pathname = usePathname();
-  const id = pathname.split('/').pop();
-
   return (
     <>
-    <Layout id={id}>
+    <Layout id={usePath()}>
       <h1></h1>
     </Layout>
     </>
