@@ -49,7 +49,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
 
     return (
         <>  
-            <Header children={children}/>
+            <Header>{children}</Header>
             <Data onDataReceived={handleDataReceived} />
             <section className="text-gray-600 body-font overflow-hidden">
                 <div className="container px-5 py-24 mx-auto max-w-screen-xl">
@@ -76,8 +76,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
                 </div>
                 </div>
             </section>
-            <div>{children}</div>
-            <Footer children={children}></Footer>
+            <Footer>{children}</Footer>
         </>
     )
 }
