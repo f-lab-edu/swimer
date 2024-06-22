@@ -3,13 +3,15 @@
 import Header from './header';
 import Footer from './footer';
 import React, {useState} from 'react';
-import Data from '../lib/requestdata';
+import useData from '../lib/requestdata';
 import { PublicSwimmingPool } from '../lib/types';
 import { LinksButton, SaveVisitButton } from './button';
 import { Pagination } from "@nextui-org/pagination";
+import Loading from './loading';
+import ErrorPage from './error';
 
 export default function Layout({children}: {children: React.ReactNode;}) {
-    const [data, setData] = useState<PublicSwimmingPool[]>([]);
+	const { data, loading, error } = useData();
     const [currentPage, setCurrentPage] = useState(1);
     const [searchResults, setSearchResults] = useState<PublicSwimmingPool[]>([]);
     const [inputValue, setInputValue] = useState('');
@@ -19,10 +21,6 @@ export default function Layout({children}: {children: React.ReactNode;}) {
     const ITEMS_PER_PAGE = 10;
     const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
     const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-
-    const handleDataReceived = (receivedData: PublicSwimmingPool[]) => {
-        setData(receivedData);
-    };
 
     const handlePageChange = (pageNumber: number) => {
         setCurrentPage(pageNumber);
@@ -46,11 +44,18 @@ export default function Layout({children}: {children: React.ReactNode;}) {
 
     const totalItems = searchList.length;
     const currentItems = searchList.slice(indexOfFirstItem, indexOfLastItem);
+    
+    if (loading) {
+        return <Loading />
+    }
+
+    if(error){
+        return <ErrorPage message={error}/>
+    }
 
     return (
         <>  
             <Header children={children}/>
-            <Data onDataReceived={handleDataReceived} />
             <section className="text-gray-600 body-font overflow-hidden">
                 <div className="container px-5 py-24 mx-auto max-w-screen-xl">
                     <div className="w-full bg-white shadow-md rounded-md flex items-center">
