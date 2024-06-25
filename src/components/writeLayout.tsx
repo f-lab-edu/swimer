@@ -4,17 +4,18 @@ import { useState } from 'react';
 import Data from '../lib/requestdata';
 import { PublicSwimmingPool } from '../lib/types';
 import { addDataToFirestore } from '../data/firestore';
-
+import { useRouter } from 'next/navigation';
 
 export default function Layout({children, id}: {children: React.ReactNode; id: string | undefined;}) {
   const [data, setData] = useState<PublicSwimmingPool[]>([]);
   const [textareaData, setTextareaData] = useState<string>('');
+  const router = useRouter();
 
   const handleDataReceived = (receivedData: PublicSwimmingPool[]) => {
     setData(receivedData);
   };
 
-  const handleAddData = () => {
+  const handleAddData = async () => {
     const selectedItem = data.find(item => item.id === id);
     if (!selectedItem) return;
 
@@ -26,7 +27,14 @@ export default function Layout({children, id}: {children: React.ReactNode; id: s
       user: "JM"
     };
 
-    addDataToFirestore(addData);
+    addDataToFirestore(addData).then(() => {
+      alert("리뷰가 등록되었습니다.");
+      setTextareaData("");
+      router.push("/");
+    })
+    .catch(error => {
+      alert("다시 시도해주세요.");
+    });
   };
 
   return (
