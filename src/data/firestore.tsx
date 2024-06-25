@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, Firestore, doc, setDoc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, doc, setDoc, serverTimestamp } from "firebase/firestore";
 import "firebase/firestore";
+import { v4 as uuidv4 } from 'uuid';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC6wXhBHLfJrbtt1rJYN5OYALZR1PAaqCQ",
@@ -48,14 +49,27 @@ interface AddData {
     user: string;
 }
 
+function formatDate(date: Date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+  
+    return `${year}-${month}-${day}`;
+}
+
 export async function addDataToFirestore(data: AddData) {
+    const today = new Date();
+    const formattedDate = formatDate(today);
+    console.log(formattedDate);
+    
     try {
-        await setDoc(doc(db, "project01", data.id), {
+        await setDoc(doc(db, data.id, uuidv4()), {
             id: data.id,
             name: data.name,
             address: data.address,
             contents: data.contents,
-            user: data.user
+            user: data.user,
+            reg_date: formattedDate
         });
         console.log('add 성공');
     } catch (error) {
