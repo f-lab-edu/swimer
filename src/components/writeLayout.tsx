@@ -16,14 +16,6 @@ export default function Layout({children}: {children: React.ReactNode;}) {
   const [review, setReview] = useState<ReviewData[]>([]);
   const [textareaData, setTextareaData] = useState('');
 
-  const reviewData = async() => {
-    const response = await fetchReviewData();
-    setReview(response);
-  };
-
-  reviewData();
-
-  fetchReviewData();
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
       setTextareaData(event.target.value);
   };

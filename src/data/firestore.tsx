@@ -3,20 +3,20 @@ import { getFirestore, collection, getDocs, Firestore, doc, setDoc } from "fireb
 import "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCEfwfZVfop11CCoXgP6weav8t6eGGvLxs",
-  authDomain: "swimmer-d3ede.firebaseapp.com",
-  projectId: "swimmer-d3ede",
-  storageBucket: "swimmer-d3ede.appspot.com",
-  messagingSenderId: "115755048806",
-  appId: "1:115755048806:web:2fc7c8cb60f38b791172a7",
-  measurementId: "G-YCEXF8262Y"
+  apiKey: "AIzaSyC6wXhBHLfJrbtt1rJYN5OYALZR1PAaqCQ",
+  authDomain: "project01-80eb1.firebaseapp.com",
+  projectId: "project01-80eb1",
+  storageBucket: "project01-80eb1.appspot.com",
+  messagingSenderId: "708304216648",
+  appId: "1:708304216648:web:dea2783bb3d914a7596e7d",
+  measurementId: "G-9W4W29GWVQ"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export async function fetchReviewData() {
-    const querySnapShot = await getDocs(collection(db, "review"));
+    const querySnapShot = await getDocs(collection(db, "project01"));
     
     if(querySnapShot.empty){
         return [];
@@ -25,13 +25,13 @@ export async function fetchReviewData() {
     const fetchedData: { id: string; address: string; contents: string; name: string; }[] = [];
 
     querySnapShot.forEach((doc) => {
-        // console.log(doc.id, " => " + doc.data()["contents"]) ;
 
         const reviewData = {
-            id: doc.id,
+            id: doc.data()["id"],
             address: doc.data()["address"],
             contents: doc.data()["contents"],
-            name: doc.data()["name"]
+            name: doc.data()["name"],
+            user: doc.data()["user"]
         }
         fetchedData.push(reviewData);
     }); 
