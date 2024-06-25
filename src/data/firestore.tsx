@@ -16,14 +16,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export async function fetchReviewData() {
-    const querySnapShot = await getDocs(collection(db, "project01"));
-    
+export async function fetchReviewData(id: string) {
+    const querySnapShot = await getDocs(collection(db, id));
+
     if(querySnapShot.empty){
         return [];
     }
 
-    const fetchedData: { id: string; address: string; contents: string; name: string; }[] = [];
+    const fetchedData: { id: string; address: string; contents: string; name: string; user: string; reg_date: string; }[] = [];
 
     querySnapShot.forEach((doc) => {
 
@@ -32,14 +32,13 @@ export async function fetchReviewData() {
             address: doc.data()["address"],
             contents: doc.data()["contents"],
             name: doc.data()["name"],
-            user: doc.data()["user"]
+            user: doc.data()["user"],
+            reg_date: doc.data()["reg_date"]
         }
         fetchedData.push(reviewData);
     }); 
     return fetchedData;
 }
-
-fetchReviewData();
 
 interface AddData {
     id: string;
