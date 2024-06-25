@@ -40,14 +40,22 @@ export async function fetchReviewData() {
 
 fetchReviewData();
 
-export async function addDataToFirestore(data: string) {
+interface AddData {
+    id: string;
+    name: string;
+    address: string;
+    contents: string;
+    user: string;
+}
+
+export async function addDataToFirestore(data: AddData) {
     try {
-        await setDoc(doc(db, "review"), {
-            id: "5",
-            name: "안성시수영장",
-            address: "안성시",
-            contents: data,
-            user: "user1"
+        await setDoc(doc(db, "project01", data.id), {
+            id: data.id,
+            name: data.name,
+            address: data.address,
+            contents: data.contents,
+            user: data.user
         });
         console.log('add 성공');
     } catch (error) {
