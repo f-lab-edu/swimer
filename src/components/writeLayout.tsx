@@ -44,7 +44,7 @@ export default function Layout({children, id}: {children: React.ReactNode; id: s
 
   return (
     <>
-      <Header>{children}</Header>
+      <Header></Header>
       <section className="text-gray-600 body-font relative">
         {data.map((item, index) => (
           <div key={index}>
@@ -63,7 +63,7 @@ export default function Layout({children, id}: {children: React.ReactNode; id: s
           </div>
         ))}
       </section>
-      <Footer>{children}</Footer>
+      <Footer></Footer>
     </>
   )
 }

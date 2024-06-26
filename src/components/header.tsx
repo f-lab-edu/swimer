@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { singOut } from '../data/firestore';
 import { useAuthState } from "../contexts/AuthContext";
 
-export default function Header({children}: {children: React.ReactNode;}) {
+export default function Header() {
     const user = useAuthState();
     
     const handleClick = () => {
