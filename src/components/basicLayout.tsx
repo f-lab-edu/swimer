@@ -16,10 +16,9 @@ export default function Layout({children}: {children: React.ReactNode;}) {
     const searchProperties = ["FACLT_NM", "SIGUN_NM"];
     let searchList: PublicSwimmingPool[] = data;
 
-    const totalItems = data.length;
-    const itemsPerPage = 10;
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const ITEMS_PER_PAGE = 10;
+    const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+    const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
 
     const handleDataReceived = (receivedData: PublicSwimmingPool[]) => {
         setData(receivedData);
@@ -45,6 +44,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
         searchList = searchResults;
     }
 
+    const totalItems = searchList.length;
     const currentItems = searchList.slice(indexOfFirstItem, indexOfLastItem);
 
     return (
@@ -72,7 +72,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
                     </div>
                     ))}
                 <div className="flex justify-center flex-wrap gap-4 items-center mt-5">
-                    <Pagination total={Math.ceil(totalItems / itemsPerPage)} initialPage={currentPage} page={currentPage} onChange={(page: number) => handlePageChange(page)} color="primary"/>
+                    <Pagination total={Math.ceil(totalItems / ITEMS_PER_PAGE)} initialPage={currentPage} page={currentPage} onChange={(page: number) => handlePageChange(page)} color="primary"/>
                 </div>
                 </div>
             </section>
