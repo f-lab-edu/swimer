@@ -6,25 +6,33 @@ import React, {useState} from 'react';
 import Data from '../lib/requestdata';
 import { PublicSwimmingPool } from '../lib/types';
 import { LinksButton, SaveVisitButton } from './button';
+import { Pagination } from "@nextui-org/pagination";
 
 export default function Layout({children}: {children: React.ReactNode;}) {
     const [data, setData] = useState<PublicSwimmingPool[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchResults, setSearchResults] = useState<PublicSwimmingPool[]>([]);
+    const [inputValue, setInputValue] = useState('');
+    const searchProperties = ["FACLT_NM", "SIGUN_NM"];
+    let searchList: PublicSwimmingPool[] = data;
+
+    const totalItems = data.length;
+    const itemsPerPage = 10;
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
     const handleDataReceived = (receivedData: PublicSwimmingPool[]) => {
         setData(receivedData);
     };
 
-    const [searchResults, setSearchResults] = useState<PublicSwimmingPool[]>([]);
-    const [inputValue, setInputValue] = useState('');
-    const searchProperties = ["FACLT_NM", "SIGUN_NM"];
-
+    const handlePageChange = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    };
 
     function handleSearch(term: string) {
-        const allPool = data.map((item) => (
-            item
-        ));
+        const allPools = data.map((item) => item);
 
-        const results = allPool.filter(pool =>
+        const results = allPools.filter(pool =>
             searchProperties.some(prop =>
                 pool[prop].replaceAll(" ", "").includes(term.replaceAll(" ", ""))
             )
@@ -32,12 +40,12 @@ export default function Layout({children}: {children: React.ReactNode;}) {
         setInputValue(term);
         setSearchResults(results);
     }
-    
-    let searchList: PublicSwimmingPool[] = data;
 
     if(inputValue !== ""){
         searchList = searchResults;
     }
+
+    const currentItems = searchList.slice(indexOfFirstItem, indexOfLastItem);
 
     return (
         <>  
@@ -49,20 +57,23 @@ export default function Layout({children}: {children: React.ReactNode;}) {
                         <input type="text" placeholder="수영장 이름, 특정 지역 검색" className="w-full px-4 py-2 focus:outline-none rounded-md" onChange={(e) => handleSearch(e.target.value)}/>
                     </div>
                     <br/><br/>
-                    {searchList.map((item, index) => (
+                    {currentItems.map((item, index) => (
                     <div className="-my-8 divide-y-2 divide-gray-100" key={index}>
-                    <div className="py-8 flex flex-wrap md:flex-nowrap">
-                        <div className="md:flex-grow border-b-2 border-gray">
-                            <h2 className="font-semibold text-2xl font-medium text-gray-900 title-font mb-2">{item.FACLT_NM}</h2>
-                            <p className="leading-relaxed">{item.SIGUN_NM}</p>
-                            <LinksButton id={item.id}/>
-                        </div>
-                        <div className="flex items-center border-b-2 border-gray">
-                        <SaveVisitButton id={item.id}/>
+                        <div className="py-8 flex flex-wrap md:flex-nowrap">
+                            <div className="md:flex-grow border-b-2 border-gray">
+                                <h2 className="font-semibold text-2xl font-medium text-gray-900 title-font mb-2">{item.FACLT_NM}</h2>
+                                <p className="leading-relaxed">{item.SIGUN_NM}</p>
+                                <LinksButton id={item.id}/>
+                            </div>
+                            <div className="flex items-center border-b-2 border-gray">
+                            <SaveVisitButton id={item.id}/>
+                            </div>
                         </div>
                     </div>
+                    ))}
+                <div className="flex justify-center flex-wrap gap-4 items-center mt-5">
+                    <Pagination total={Math.ceil(totalItems / itemsPerPage)} initialPage={currentPage} page={currentPage} onChange={(page: number) => handlePageChange(page)} color="primary"/>
                 </div>
-            ))}
                 </div>
             </section>
             <div>{children}</div>
