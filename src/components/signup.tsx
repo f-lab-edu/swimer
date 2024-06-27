@@ -28,7 +28,12 @@ export default function Layout({children}: {children: React.ReactNode;}) {
 
     const handleSubmit = async(e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        validate();
 
+        if (email === '' || password.length < 6) {
+            return;
+        }
+        
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             alert("회원 가입 성공");
@@ -42,6 +47,19 @@ export default function Layout({children}: {children: React.ReactNode;}) {
             console.log("errorCode: " + errorCode + "   errorMessage" + errorMessage);
         });
     }
+
+    const validate = () => {
+        if(email === ''){
+            alert("Email을 입력하세요");
+            return;
+        }
+
+        if(password.length <= 6){
+            alert("비밀번호는 6글자 이상으로 입력하세요");
+            setPassword('');
+            return;
+        }
+    }
       
     return (
       <>
@@ -53,11 +71,11 @@ export default function Layout({children}: {children: React.ReactNode;}) {
                         <h2 className="text-gray-900 text-lg font-medium title-font mb-5">Sign Up</h2>
                         <div className="relative mb-4">
                             <label className="leading-7 text-sm text-gray-600">Email</label>
-                            <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                            <input type="email" id="email" name="email" value={email} placeholder="e.g., xyz@gmail.com" onChange={(e) => setEmail(e.target.value)} className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
                         </div>
                         <div className="relative mb-7">
                             <label className="leading-7 text-sm text-gray-600">Password</label>
-                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)}  className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                            <input type="password" id="password" name="password" value={password} placeholder="e.g., ****** 최소 6글자" onChange={(e) => setPassword(e.target.value)}  className="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
                         </div>
                         <button type="submit" className="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-300 rounded text-lg">Sign Up</button><br></br>
                     </form>
