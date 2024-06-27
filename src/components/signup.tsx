@@ -33,7 +33,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
         if (email === '' || password.length < 6) {
             return;
         }
-        
+
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             alert("회원 가입 성공");
@@ -41,10 +41,16 @@ export default function Layout({children}: {children: React.ReactNode;}) {
             router.push("/login");
         })
         .catch((error) => {
-            alert("다시 시도해주세요");
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log("errorCode: " + errorCode + "   errorMessage" + errorMessage);
+            if(error.code === 'auth/email-already-in-use'){
+                alert('이미 사용 중인 이메일 주소입니다.');
+                setEmail('');
+                setPassword('');
+            }else{
+                console.error('Firebase Error:', error.message);
+                setEmail('');
+                setPassword('');
+                alert("다시 시도해주세요");
+            }
         });
     }
 
