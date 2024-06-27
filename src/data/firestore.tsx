@@ -1,20 +1,22 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, doc, setDoc, serverTimestamp } from "firebase/firestore";
-import "firebase/firestore";
+import { getFirestore, collection, getDocs, doc, setDoc } from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { v4 as uuidv4 } from 'uuid';
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC6wXhBHLfJrbtt1rJYN5OYALZR1PAaqCQ",
-  authDomain: "project01-80eb1.firebaseapp.com",
-  projectId: "project01-80eb1",
-  storageBucket: "project01-80eb1.appspot.com",
-  messagingSenderId: "708304216648",
-  appId: "1:708304216648:web:dea2783bb3d914a7596e7d",
-  measurementId: "G-9W4W29GWVQ"
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth();
 
 export async function fetchReviewData(id: string) {
     const querySnapShot = await getDocs(collection(db, id));
@@ -74,4 +76,35 @@ export async function addDataToFirestore(data: AddData) {
     } catch (error) {
         console.error('add 실패: ', error);
     }
+}
+
+export function signUp(email: string, password: string, router: string[] | AppRouterInstance){
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+        alert("회원 가입 성공");
+        console.log("userCredential: " + userCredential);
+        router.push("/login");
+    })
+    .catch((error) => {
+        if(error.code === 'auth/email-already-in-use'){
+            alert('이미 사용 중인 이메일 주소입니다.');
+        }else{
+            console.error('Firebase Error:', error.message);
+            alert("다시 시도해주세요");
+        }
+    });
+}
+
+export function signIn(email: string, password: string, router: string[] | AppRouterInstance){
+    signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+        alert("로그인 성공");
+        router.push("/");
+        const user = userCredential.user;
+        console.log("user: " + user);
+    })
+    .catch((error) => {
+        console.error('Firebase Error:', error.message);
+        alert("다시 시도해주세요");
+    });
 }

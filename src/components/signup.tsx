@@ -2,9 +2,8 @@
 
 import Header from './header';
 import Footer from './footer';
-import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { FormEvent, useState } from 'react';
+import { signUp } from '@/data/firestore';
 import { useRouter } from 'next/navigation';
 
 export default function Layout({children}: {children: React.ReactNode;}) {
@@ -12,20 +11,6 @@ export default function Layout({children}: {children: React.ReactNode;}) {
     const [password, setPassword] = useState('');
     const router = useRouter();
     
-    const firebaseConfig = {
-        apiKey: "AIzaSyC6wXhBHLfJrbtt1rJYN5OYALZR1PAaqCQ",
-        authDomain: "project01-80eb1.firebaseapp.com",
-        projectId: "project01-80eb1",
-        storageBucket: "project01-80eb1.appspot.com",
-        messagingSenderId: "708304216648",
-        appId: "1:708304216648:web:dea2783bb3d914a7596e7d",
-        measurementId: "G-9W4W29GWVQ"
-    };
-
-    initializeApp(firebaseConfig);
-
-    const auth = getAuth();
-
     const handleSubmit = async(e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         validate();
@@ -34,24 +19,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
             return;
         }
 
-        createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            alert("회원 가입 성공");
-            console.log("userCredential: " + userCredential);
-            router.push("/login");
-        })
-        .catch((error) => {
-            if(error.code === 'auth/email-already-in-use'){
-                alert('이미 사용 중인 이메일 주소입니다.');
-                setEmail('');
-                setPassword('');
-            }else{
-                console.error('Firebase Error:', error.message);
-                setEmail('');
-                setPassword('');
-                alert("다시 시도해주세요");
-            }
-        });
+        signUp(email, password, router);
     }
 
     const validate = () => {
