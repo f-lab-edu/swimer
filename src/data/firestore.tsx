@@ -83,7 +83,7 @@ export function signUp(email: string, password: string, router: string[] | AppRo
     .then((userCredential) => {
         alert("회원 가입 성공");
         console.log("userCredential: " + userCredential);
-        router.push("/login");
+        router.push("/");
     })
     .catch((error) => {
         if(error.code === 'auth/email-already-in-use'){
