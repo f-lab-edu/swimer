@@ -15,10 +15,6 @@ export default function Layout({children}: {children: React.ReactNode;}) {
         e.preventDefault();
         validate();
 
-        if (email === '' || password.length < 6) {
-            return;
-        }
-
         signUp(email, password, router);
     }
 
