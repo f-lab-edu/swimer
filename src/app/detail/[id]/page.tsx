@@ -5,8 +5,6 @@ import { usePath } from "../../../lib/utils";
 
 export default function Home() {
   return (
-    <>
     <Layout id={usePath()}></Layout>
-    </>
   );
 }

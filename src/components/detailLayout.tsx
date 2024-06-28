@@ -17,7 +17,7 @@ interface ReviewData {
   reg_date: string;
 }
 
-export default function Layout({children, id}: {children: React.ReactNode; id: string}) {
+export default function Layout({id}: {readonly id: string}) {
 	const { data, loading, error } = useData();
 	const [reviews, setReviews] = useState<ReviewData[]>([]);
 
