@@ -108,3 +108,5 @@ export function signIn(email: string, password: string, router: string[] | AppRo
         alert("다시 시도해주세요");
     });
 }
+
+export const authService = getAuth();
