@@ -109,4 +109,8 @@ export function signIn(email: string, password: string, router: string[] | AppRo
     });
 }
 
+export function singOut(){
+    auth.signOut();
+}
+
 export const authService = getAuth();

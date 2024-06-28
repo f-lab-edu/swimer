@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { authService } from '../data/firestore';
+import { authService, singOut } from '../data/firestore';
 
 export default function Header({children}: {children: React.ReactNode;}) {
     const [userName, setUserName] = useState<string | null>(null);
@@ -16,6 +16,10 @@ export default function Header({children}: {children: React.ReactNode;}) {
         });
     }, []);
 
+    const handleClick = () => {
+        singOut();
+    }
+
     return (
         <>
             <header className="text-gray-600 body-font">
@@ -29,7 +33,8 @@ export default function Header({children}: {children: React.ReactNode;}) {
                     <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
                         {/* 중복 코드 존재 -> 정리 필요 */}
                         {userName !== null ? (
-                            <Link href={'/mypage'}>
+                            <>
+                            <Link href={'/mypage'} className='mr-3'>
                                 <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 text-blue-500">
                                     {userName}님
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="size-8 ml-2">
@@ -37,6 +42,8 @@ export default function Header({children}: {children: React.ReactNode;}) {
                                     </svg>
                                 </button>
                             </Link>
+                            <p className='text-gray-300 text-sm mt-5 hover:text-gray-500' onClick={handleClick}>로그아웃</p>
+                            </>
                         ) : (
                             <Link href={'/login'}>
                                 <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 text-blue-500">
