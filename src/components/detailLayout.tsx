@@ -27,8 +27,10 @@ export default function Layout({children, id}: {children: React.ReactNode; id: s
     const reviews = await fetchReviewData(id);
     setReviews(reviews);
 	};
+
+  fetchData();
 	
-	if (id) {fetchData();}}, []);
+	}, [id]);
 	
 	if (loading) {
 	  return <Loading />
