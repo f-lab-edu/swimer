@@ -42,7 +42,7 @@ export default function Layout({children, id}: {children: React.ReactNode; id: s
 	
 	return (
     <>
-      <Header></Header>
+      <Header />
         <section className="text-gray-600 body-font overflow-hidden min-h-max">
           {data.map((item, index) => (
             <div key={index} className="container px-5 mx-auto max-w-screen-xl">
@@ -82,7 +82,7 @@ export default function Layout({children, id}: {children: React.ReactNode; id: s
             </div>
           ))}
         </section>
-      <Footer></Footer>
+        <Footer />
     </>
 	)
 }
