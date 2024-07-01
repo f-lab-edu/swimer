@@ -31,7 +31,7 @@ export default function Header({children}: {children: React.ReactNode;}) {
                                     </svg>
                                 </button>
                             </Link>
-                            <p className='text-gray-300 text-sm mt-5 hover:text-gray-500' onClick={handleClick}>로그아웃</p>
+                            <button className='text-gray-300 text-sm mt-5 hover:text-gray-500' onClick={handleClick}>로그아웃</button>
                             </>
                         ) : (
                             <Link href={'/login'}>
