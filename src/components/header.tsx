@@ -1,20 +1,9 @@
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { authService, singOut } from '../data/firestore';
+import { singOut } from '../data/firestore';
+import { useAuthState } from "../contexts/AuthContext";
 
 export default function Header({children}: {children: React.ReactNode;}) {
-    const [userName, setUserName] = useState<string | null>(null);
-
-    useEffect(() => {
-        authService.onAuthStateChanged((user) => {
-          if (user && user.email) {
-            const userEmail = user.email;
-            setUserName(userEmail.split('@')[0]);
-          } else {
-            setUserName(null);
-          }
-        });
-    }, []);
+    const userName = useAuthState().split('@')[0];
 
     const handleClick = () => {
         singOut();
@@ -32,7 +21,7 @@ export default function Header({children}: {children: React.ReactNode;}) {
                     </Link>
                     <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
                         {/* 중복 코드 존재 -> 정리 필요 */}
-                        {userName !== null ? (
+                        {userName !== '' ? (
                             <>
                             <Link href={'/mypage'} className='mr-3'>
                                 <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 text-blue-500">
