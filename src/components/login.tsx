@@ -20,7 +20,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
 
     return (
       <>
-          <Header children={children}/>
+          <Header />
           <section className="text-gray-600 body-font overflow-hidden min-h-max md:mt-12 md:mb-12">
               <div className="container px-5 mx-auto max-w-screen-xl">
                 <div className="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:ml-auto md:mr-auto w-full mt-10 md:mt-12">
@@ -45,7 +45,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
               </div>
           </section>
           <br></br>
-          <Footer children={children}></Footer>
+          <Footer />
       </>
     )
 }

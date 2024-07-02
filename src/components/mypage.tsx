@@ -5,7 +5,7 @@ import Link from 'next/link';
 export default function Layout({children}: {children: React.ReactNode;}) {
     return (
         <>
-        <Header>{children}</Header>
+        <Header />
             <section className="text-gray-600 body-font overflow-hidden min-h-max">
               <div className="container px-5 mx-auto max-w-screen-xl">
                       <div className="container px-5 py-24 mx-auto">
@@ -37,7 +37,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
                     </div>
               </div>
             </section>
-        <Footer>{children}</Footer>
+          <Footer />
         </>
     )
 }

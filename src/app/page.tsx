@@ -2,6 +2,8 @@ import Layout from "../components/basicLayout"
 
 export default function Home() {
   return (
-    <Layout></Layout>
+    <Layout>
+      <h1></h1>
+    </Layout>
   );
 }
