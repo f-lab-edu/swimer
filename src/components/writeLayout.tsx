@@ -50,7 +50,7 @@ export default function Layout({id}: {readonly id: string | undefined;}) {
           <div key={index}>
             {item.id === id && 
             <div className="container px-5 py-20 mx-auto flex justify-center items-center">
-              <div className="lg:w-2/3 md:w-1/2 bg-white rounded-lg p-8 flex flex-col md:w-full md:relative z-10">
+              <div className="lg:w-2/3 md:w-1/2 bg-white rounded-lg p-8 flex flex-col md:relative z-10">
                 <h2 className="text-gray-900 text-lg mb-1 font-medium title-font">{item.FACLT_NM}</h2>
                 <p className="leading-relaxed mb-5 text-gray-600">{item.SIGUN_NM}</p>
                 <div className="relative mb-4">

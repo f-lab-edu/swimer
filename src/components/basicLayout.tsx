@@ -67,7 +67,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
                     <div className="-my-8 divide-y-2 divide-gray-100" key={index}>
                         <div className="py-8 flex flex-wrap md:flex-nowrap">
                             <div className="md:flex-grow border-b-2 border-gray">
-                                <h2 className="font-semibold text-2xl font-medium text-gray-900 title-font mb-2">{item.FACLT_NM}</h2>
+                                <h2 className="font-semibold text-2xl text-gray-900 title-font mb-2">{item.FACLT_NM}</h2>
                                 <p className="leading-relaxed">{item.SIGUN_NM}</p>
                                 <MoveDetailButton id={item.id}/>
                             </div>

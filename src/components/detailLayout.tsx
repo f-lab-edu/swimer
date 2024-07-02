@@ -7,6 +7,7 @@ import useData from '../lib/requestdata';
 import Loading from './loading';
 import ErrorPage from './error';
 import { fetchReviewData } from '@/data/firestore';
+import Image from "next/image";
 
 interface ReviewData {
   id: string;
@@ -51,7 +52,7 @@ export default function Layout({id}: {readonly id: string}) {
                   <div className="-my-8 divide-y-2 divide-gray-100">
                     <div className="py-8 flex flex-wrap md:flex-nowrap">
                       <div className="md:w-64 mr-10 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-                        <img src="https://dummyimage.com/720x600"></img>
+                        <img src="https://dummyimage.com/720x600" alt="Placeholder Image"></img>
                       </div>
                       <div className="md:flex-grow mt-10">
                         <h2 className="text-2xl font-medium text-gray-900 title-font mb-20">{item.FACLT_NM}</h2>
