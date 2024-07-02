@@ -7,7 +7,7 @@ import ErrorPage from './error';
 import { addDataToFirestore } from '../data/firestore';
 import { useRouter } from 'next/navigation';
 
-export default function Layout({id}: {readonly id: string | undefined;}) {
+export default function Layout({id}: {readonly id: string}) {
   const { data, loading, error } = useData();
   const [textareaData, setTextareaData] = useState<string>('');
   const router = useRouter();
