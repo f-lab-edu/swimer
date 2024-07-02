@@ -7,9 +7,10 @@ import useData from '../lib/requestdata';
 import { PublicSwimmingPool } from '../lib/types';
 import MoveDetailButton from './moveDetailButton';
 import SaveVisitButton from './saveVisitButton';
-import { Pagination } from "@nextui-org/pagination";
 import Loading from './loading';
 import ErrorPage from './error';
+import Pagination from './pagination';
+
 
 export default function Layout({children}: {children: React.ReactNode;}) {
 	const { data, loading, error } = useData();
@@ -26,6 +27,23 @@ export default function Layout({children}: {children: React.ReactNode;}) {
     const handlePageChange = (pageNumber: number) => {
         setCurrentPage(pageNumber);
     };
+
+    function SwimmingPoolList(){
+        return (
+            <>
+            {currentItems.map((item, index) => (
+                <div className="py-8 flex flex-wrap md:flex-nowrap" key={index}>
+                    <div className="md:flex-grow border-b-2 border-gray">
+                        <h2 className="font-semibold text-2xl text-gray-900 title-font mb-2">{item.FACLT_NM}</h2>
+                        <p className="leading-relaxed">{item.SIGUN_NM}</p>
+                        <MoveDetailButton id={item.id}/>
+                    </div>
+                    <div className="flex items-center border-b-2 border-gray"><SaveVisitButton id={item.id}/></div>
+                </div>
+            ))}
+            </>
+        )
+    }
 
     function handleSearch(term: string) {
         const allPools = data.map((item) => item);
@@ -63,23 +81,8 @@ export default function Layout({children}: {children: React.ReactNode;}) {
                         <input type="text" placeholder="수영장 이름, 특정 지역 검색" className="w-full px-4 py-2 focus:outline-none rounded-md" onChange={(e) => handleSearch(e.target.value)}/>
                     </div>
                     <br/><br/>
-                    {currentItems.map((item, index) => (
-                    <div className="-my-8 divide-y-2 divide-gray-100" key={index}>
-                        <div className="py-8 flex flex-wrap md:flex-nowrap">
-                            <div className="md:flex-grow border-b-2 border-gray">
-                                <h2 className="font-semibold text-2xl text-gray-900 title-font mb-2">{item.FACLT_NM}</h2>
-                                <p className="leading-relaxed">{item.SIGUN_NM}</p>
-                                <MoveDetailButton id={item.id}/>
-                            </div>
-                            <div className="flex items-center border-b-2 border-gray">
-                            <SaveVisitButton id={item.id}/>
-                            </div>
-                        </div>
-                    </div>
-                    ))}
-                <div className="flex justify-center flex-wrap gap-4 items-center mt-5">
-                    <Pagination total={Math.ceil(totalItems / ITEMS_PER_PAGE)} initialPage={currentPage} page={currentPage} onChange={(page: number) => handlePageChange(page)} color="primary"/>
-                </div>
+                    <div className="-my-8 divide-y-2 divide-gray-100"><SwimmingPoolList /></div>
+                    <Pagination totalItems={totalItems} currentPage={currentPage} onPageChange={handlePageChange} />
                 </div>
             </section>
             <Footer />
