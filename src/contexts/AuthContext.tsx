@@ -2,23 +2,31 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { authService } from '../data/firestore'
 
-const AuthStateContext = createContext<string>('');  
+interface AuthContextType {
+  userEmail: string | null;
+  displayName: string | null;
+}
+
+const AuthStateContext = createContext<AuthContextType>({userEmail: null, displayName: null});
 
 export const AuthContextProvider = ({ children }: {children: React.ReactNode;}) => {
-  const [userName, setUserName] = useState<string>('');
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [displayName, setDisplayName] = useState<string | null>(null);
   
   useEffect(() => {
       authService.onAuthStateChanged((user) => {
-        if (user && user.email) {
-          setUserName(user.email);
+        if (user) {
+          setUserEmail(user.email);
+          setDisplayName(user.email ? user.email.split('@')[0] : null);
         } else {
-          setUserName('');
+          setUserEmail(null);
+          setDisplayName(null);
         }
       });
     }, []);
   
     return (
-      <AuthStateContext.Provider value={userName}>
+      <AuthStateContext.Provider value={{ userEmail, displayName }}>
         {children}
       </AuthStateContext.Provider>
     );
@@ -26,6 +34,5 @@ export const AuthContextProvider = ({ children }: {children: React.ReactNode;}) 
 
 export const useAuthState = () => {
   const authState = useContext(AuthStateContext);
-  console.log("authState: " + authState);
   return authState;
 };

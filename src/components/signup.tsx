@@ -13,22 +13,23 @@ export default function Layout({children}: {children: React.ReactNode;}) {
     
     const handleSubmit = async(e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        validate();
-
-        signUp(email, password, router);
+        if(validate()){
+            signUp(email, password, router);
+        }
     }
 
-    const validate = () => {
+    const validate = (): boolean => {
         if(email === ''){
             alert("Email을 입력하세요");
-            return;
+            return false;
         }
 
         if(password.length <= 6){
             alert("비밀번호는 6글자 이상으로 입력하세요");
             setPassword('');
-            return;
+            return false;
         }
+        return true;
     }
       
     return (
