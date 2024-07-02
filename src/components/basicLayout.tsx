@@ -32,14 +32,14 @@ export default function Layout({children}: {children: React.ReactNode}) {
       <>
         {currentItems.map((item, index) => (
           <div className="py-8 flex flex-wrap md:flex-nowrap" key={index}>
-            <div className="md:flex-grow border-b-2 border-gray">
+            <div className="md:flex-grow">
               <h2 className="font-semibold text-2xl text-gray-900 title-font mb-2">
                 {item.FACLT_NM}
               </h2>
               <p className="leading-relaxed">{item.SIGUN_NM}</p>
               <MoveDetailButton id={item.id} />
             </div>
-            <div className="flex items-center border-b-2 border-gray">
+            <div className="flex items-center">
               <SaveVisitButton id={item.id} />
             </div>
           </div>
@@ -90,7 +90,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
           </div>
           <br />
           <br />
-          <div className="-my-8 divide-y-2 divide-gray-100">
+          <div className="-my-8 divide-y-2 divide-gray-100 border-b-2 border-gray mb-10">
             <SwimmingPoolList />
           </div>
           <Pagination
