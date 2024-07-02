@@ -17,7 +17,7 @@ interface ReviewData {
   reg_date: string;
 }
 
-export default function Layout({children, id}: {children: React.ReactNode; id: string}) {
+export default function Layout({id}: {readonly id: string}) {
 	const { data, loading, error } = useData();
 	const [reviews, setReviews] = useState<ReviewData[]>([]);
 
@@ -42,7 +42,7 @@ export default function Layout({children, id}: {children: React.ReactNode; id: s
 	
 	return (
     <>
-      <Header>{children}</Header>
+      <Header />
         <section className="text-gray-600 body-font overflow-hidden min-h-max">
           {data.map((item, index) => (
             <div key={index} className="container px-5 mx-auto max-w-screen-xl">
@@ -82,7 +82,7 @@ export default function Layout({children, id}: {children: React.ReactNode; id: s
             </div>
           ))}
         </section>
-      <Footer>{children}</Footer>
+        <Footer />
     </>
 	)
 }

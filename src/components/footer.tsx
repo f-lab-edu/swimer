@@ -1,4 +1,4 @@
-export default function Header({children}: {children: React.ReactNode;}) {
+export default function Footer() {
     return (
         <>
             <footer className="text-gray-600 body-font bg-blue-500">
