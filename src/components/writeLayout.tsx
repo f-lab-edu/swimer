@@ -1,19 +1,16 @@
 import Header from './header';
 import Footer from './footer';
 import { useState } from 'react';
-import Data from '../lib/requestdata';
-import { PublicSwimmingPool } from '../lib/types';
+import useData from '../lib/requestdata';
+import Loading from './loading';
+import ErrorPage from './error';
 import { addDataToFirestore } from '../data/firestore';
 import { useRouter } from 'next/navigation';
 
 export default function Layout({children, id}: {children: React.ReactNode; id: string | undefined;}) {
-  const [data, setData] = useState<PublicSwimmingPool[]>([]);
+  const { data, loading, error } = useData();
   const [textareaData, setTextareaData] = useState<string>('');
   const router = useRouter();
-
-  const handleDataReceived = (receivedData: PublicSwimmingPool[]) => {
-    setData(receivedData);
-  };
 
   const handleAddData = async () => {
     const selectedItem = data.find(item => item.id === id);
@@ -36,11 +33,18 @@ export default function Layout({children, id}: {children: React.ReactNode; id: s
       alert("다시 시도해주세요.");
     });
   };
+  
+  if (loading) {
+    return <Loading />
+  }
+
+  if(error){
+    return <ErrorPage message={error}/>
+  }
 
   return (
     <>
       <Header children={children}/>
-      <Data onDataReceived={handleDataReceived} />
       <section className="text-gray-600 body-font relative">
         {data.map((item, index) => (
           <div key={index}>
@@ -50,9 +54,9 @@ export default function Layout({children, id}: {children: React.ReactNode; id: s
                 <h2 className="text-gray-900 text-lg mb-1 font-medium title-font">{item.FACLT_NM}</h2>
                 <p className="leading-relaxed mb-5 text-gray-600">{item.SIGUN_NM}</p>
                 <div className="relative mb-4">
-                    <textarea onChange={(e) => setTextareaData(e.target.value)} value={textareaData} id="message" name="message" placeholder="후기를 입력해주세요" className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
-                </div>
-                <button type="submit" onClick={handleAddData} className="text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-300 rounded text-lg">등록</button>
+					        <textarea onChange={(e) => setTextareaData(e.target.value)} value={textareaData} id="message" name="message" placeholder="후기를 입력해주세요" className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+					      </div>
+					      <button type="submit" onClick={handleAddData} className="text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-300 rounded text-lg">등록</button>
               </div>
             </div>
             }
