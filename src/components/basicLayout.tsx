@@ -5,7 +5,8 @@ import Footer from './footer';
 import React, {useState} from 'react';
 import useData from '../lib/requestdata';
 import { PublicSwimmingPool } from '../lib/types';
-import { LinksButton, SaveVisitButton } from './button';
+import MoveDetailButton from './moveDetailButton';
+import SaveVisitButton from './saveVisitButton';
 import { Pagination } from "@nextui-org/pagination";
 import Loading from './loading';
 import ErrorPage from './error';
@@ -68,7 +69,7 @@ export default function Layout({children}: {children: React.ReactNode;}) {
                             <div className="md:flex-grow border-b-2 border-gray">
                                 <h2 className="font-semibold text-2xl font-medium text-gray-900 title-font mb-2">{item.FACLT_NM}</h2>
                                 <p className="leading-relaxed">{item.SIGUN_NM}</p>
-                                <LinksButton id={item.id}/>
+                                <MoveDetailButton id={item.id}/>
                             </div>
                             <div className="flex items-center border-b-2 border-gray">
                             <SaveVisitButton id={item.id}/>
