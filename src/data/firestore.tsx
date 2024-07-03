@@ -29,7 +29,7 @@ const db = getFirestore(app);
 const auth = getAuth();
 
 export async function fetchReviewData(id: string) {
-  const querySnapShot = await getDocs(collection(db, id));
+  const querySnapShot = await getDocs(collection(db, 'reviews'));
 
   if (querySnapShot.empty) {
     return [];
@@ -45,15 +45,17 @@ export async function fetchReviewData(id: string) {
   }[] = [];
 
   querySnapShot.forEach(doc => {
-    const reviewData = {
-      id: doc.data()['id'],
-      address: doc.data()['address'],
-      contents: doc.data()['contents'],
-      name: doc.data()['name'],
-      user: doc.data()['user'],
-      reg_date: doc.data()['reg_date'],
-    };
-    fetchedData.push(reviewData);
+    if (doc.data()['id'] === id) {
+      const reviewData = {
+        id: doc.data()['id'],
+        address: doc.data()['address'],
+        contents: doc.data()['content'],
+        name: doc.data()['name'],
+        user: doc.data()['user'],
+        reg_date: doc.data()['reg_date'],
+      };
+      fetchedData.push(reviewData);
+    }
   });
   return fetchedData;
 }
@@ -80,14 +82,20 @@ export async function addDataToFirestore(data: AddData) {
   console.log(formattedDate);
 
   try {
-    await setDoc(doc(db, data.id, uuidv4()), {
+    await setDoc(doc(db, 'reviews', uuidv4()), {
       id: data.id,
-      name: data.name,
-      address: data.address,
-      contents: data.contents,
+      content: data.contents,
       user: data.user,
       reg_date: formattedDate,
     });
+
+    await setDoc(doc(db, 'swimming_pools', data.id), {
+      id: data.id,
+      name: data.name,
+      address: data.address,
+      reg_date: formattedDate,
+    });
+
     console.log('add 성공');
   } catch (error) {
     console.error('add 실패: ', error);
