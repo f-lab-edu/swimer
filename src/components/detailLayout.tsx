@@ -7,16 +7,7 @@ import useData from '../lib/requestdata';
 import Loading from './loading';
 import ErrorPage from './error';
 import {fetchReviewData} from '@/data/firestore';
-import {PublicSwimmingPool} from '../lib/types';
-
-interface ReviewData {
-  id: string;
-  address: string;
-  contents: string;
-  name: string;
-  user: string;
-  reg_date: string;
-}
+import {PublicSwimmingPool, ReviewData} from '../lib/types';
 
 export default function Layout({id}: {readonly id: string}) {
   const {data, loading, error} = useData();

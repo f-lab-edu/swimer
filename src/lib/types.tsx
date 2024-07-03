@@ -8,3 +8,12 @@ export interface PublicSwimmingPool {
   IRREGULR_RELYSWIMPL_LANE_CNT: string;
   [key: string]: string;
 }
+
+export interface ReviewData {
+  id: string;
+  address: string;
+  contents: string;
+  name: string;
+  user: string;
+  reg_date: string;
+}
