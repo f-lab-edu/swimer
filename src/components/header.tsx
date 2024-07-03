@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import {singOut} from '../data/firestore';
 import {useAuthState} from '../contexts/AuthContext';
+import {AuthContextType} from '../lib/types';
 
 export default function Header() {
   const user = useAuthState();
@@ -8,6 +9,34 @@ export default function Header() {
   const handleClick = () => {
     singOut();
   };
+
+  const AuthenticatedUserControls = ({
+    user,
+    href,
+  }: {
+    user: AuthContextType;
+    href: string;
+  }) => (
+    <>
+      <Link href={href} className="mr-3">
+        <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 text-blue-500">
+          {user.displayName !== null && `${user.displayName}님`}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            className="size-8"
+          >
+            <path
+              className="stroke-2"
+              d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            />
+          </svg>
+        </button>
+      </Link>
+    </>
+  );
 
   return (
     <>
@@ -36,26 +65,9 @@ export default function Header() {
             </span>
           </Link>
           <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
-            {/* 중복 코드 존재 -> 정리 필요 */}
             {user.displayName !== null ? (
               <>
-                <Link href={'/mypage'} className="mr-3">
-                  <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 text-blue-500">
-                    {user.displayName}님
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      className="size-8 ml-2"
-                    >
-                      <path
-                        className="stroke-2"
-                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                      />
-                    </svg>
-                  </button>
-                </Link>
+                <AuthenticatedUserControls user={user} href={'/mypage'} />
                 <button
                   className="text-gray-300 text-sm mt-5 hover:text-gray-500"
                   onClick={handleClick}
@@ -64,22 +76,7 @@ export default function Header() {
                 </button>
               </>
             ) : (
-              <Link href={'/login'}>
-                <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 text-blue-500">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    className="size-8"
-                  >
-                    <path
-                      className="stroke-2"
-                      d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                    />
-                  </svg>
-                </button>
-              </Link>
+              <AuthenticatedUserControls user={user} href={'/login'} />
             )}
           </nav>
         </div>

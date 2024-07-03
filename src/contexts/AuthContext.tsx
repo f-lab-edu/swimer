@@ -1,11 +1,7 @@
 'use client';
 import React, {createContext, useState, useEffect, useContext} from 'react';
 import {authService} from '../data/firestore';
-
-interface AuthContextType {
-  userEmail: string | null;
-  displayName: string | null;
-}
+import {AuthContextType} from '../lib/types';
 
 const AuthStateContext = createContext<AuthContextType>({
   userEmail: null,

@@ -17,3 +17,8 @@ export interface ReviewData {
   user: string;
   reg_date: string;
 }
+
+export interface AuthContextType {
+  userEmail: string | null;
+  displayName: string | null;
+}
