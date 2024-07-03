@@ -13,6 +13,7 @@ import {
 } from 'firebase/auth';
 import {v4 as uuidv4} from 'uuid';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import {ReviewData} from '../lib/types';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -28,24 +29,22 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
 
-export async function fetchReviewData(id: string) {
-  const querySnapShot = await getDocs(collection(db, 'reviews'));
+export async function fetchReviewData(id: string = '') {
+  const reviewsData: ReviewData[] = [];
+  const swimmingpoolData: ReviewData[] = [];
+  const totalData: ReviewData[] = [];
 
-  if (querySnapShot.empty) {
+  const reviewsQuerySnapshot = await getDocs(collection(db, 'reviews'));
+  const swimmingpoolQuerySnapshot = await getDocs(
+    collection(db, 'swimming_pools'),
+  );
+
+  if (reviewsQuerySnapshot.empty || swimmingpoolQuerySnapshot.empty) {
     return [];
   }
 
-  const fetchedData: {
-    id: string;
-    address: string;
-    contents: string;
-    name: string;
-    user: string;
-    reg_date: string;
-  }[] = [];
-
-  querySnapShot.forEach(doc => {
-    if (doc.data()['id'] === id) {
+  reviewsQuerySnapshot.forEach(doc => {
+    if (id === '' || doc.data()['id'] === id) {
       const reviewData = {
         id: doc.data()['id'],
         address: doc.data()['address'],
@@ -54,10 +53,40 @@ export async function fetchReviewData(id: string) {
         user: doc.data()['user'],
         reg_date: doc.data()['reg_date'],
       };
-      fetchedData.push(reviewData);
+      reviewsData.push(reviewData);
     }
   });
-  return fetchedData;
+
+  swimmingpoolQuerySnapshot.forEach(doc => {
+    const poolData = {
+      id: doc.data()['id'],
+      address: doc.data()['address'],
+      contents: doc.data()['content'],
+      name: doc.data()['name'],
+      user: doc.data()['user'],
+      reg_date: doc.data()['reg_date'],
+    };
+    swimmingpoolData.push(poolData);
+  });
+
+  reviewsData.forEach(review => {
+    const matchingPool = swimmingpoolData.find(pool => {
+      return pool.id === review.id;
+    });
+    if (matchingPool) {
+      const combinedData = {
+        id: review.id,
+        address: matchingPool.address,
+        contents: review.contents,
+        name: matchingPool.name,
+        user: review.user,
+        reg_date: review.reg_date,
+      };
+      totalData.push(combinedData);
+    }
+  });
+
+  return totalData;
 }
 
 interface AddData {
