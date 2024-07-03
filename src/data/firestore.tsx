@@ -10,6 +10,8 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  setPersistence,
+  browserSessionPersistence,
 } from 'firebase/auth';
 import {v4 as uuidv4} from 'uuid';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
@@ -151,6 +153,8 @@ export function signUp(
       }
     });
 }
+
+setPersistence(auth, browserSessionPersistence);
 
 export function signIn(
   email: string,
