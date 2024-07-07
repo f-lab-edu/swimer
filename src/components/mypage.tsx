@@ -6,6 +6,30 @@ import {useAuthState} from '../contexts/AuthContext';
 import {ReviewData} from '../lib/types';
 import {fetchReviewData} from '@/data/firestore';
 
+function ReviewList({reviews}: {reviews: ReviewData[]}) {
+  return (
+    <div className="md:flex-grow mt-20">
+      {reviews.map((item, index) => (
+        <div
+          key={index}
+          className="flex w-full mx-auto mb-5 flex-wrap bg-white rounded-lg overflow-hidden shadow-md p-4"
+        >
+          <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4 font-bold">
+            {item.swimmingpool_name}
+          </p>
+          <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4">
+            {item.review_content}
+          </p>
+          <div className="flex-grow"></div>
+          <div className="flex justify-between">
+            <p className="text-gray-500 text-sm">{item.reg_date}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function Layout({children}: {children: React.ReactNode}) {
   const [reviews, setReviews] = useState<ReviewData[]>([]);
   const user = useAuthState();
@@ -30,30 +54,6 @@ export default function Layout({children}: {children: React.ReactNode}) {
 
     fetchData();
   }, [user.displayName]);
-
-  function ReviewList({reviews}: {reviews: ReviewData[]}) {
-    return (
-      <div className="md:flex-grow mt-20">
-        {reviews.map((item, index) => (
-          <div
-            key={index}
-            className="flex w-full mx-auto mb-5 flex-wrap bg-white rounded-lg overflow-hidden shadow-md p-4"
-          >
-            <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4 font-bold">
-              {item.swimmingpool_name}
-            </p>
-            <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4">
-              {item.review_content}
-            </p>
-            <div className="flex-grow"></div>
-            <div className="flex justify-between">
-              <p className="text-gray-500 text-sm">{item.reg_date}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
 
   return (
     <>
