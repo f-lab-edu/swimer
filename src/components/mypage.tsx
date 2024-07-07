@@ -15,7 +15,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
       const reviews = await fetchReviewData();
 
       const filteredReviews = reviews.filter(
-        review => review.user === user.displayName,
+        review => review.author_user_id === user.displayName,
       );
 
       setReviews(filteredReviews);
@@ -33,10 +33,10 @@ export default function Layout({children}: {children: React.ReactNode}) {
             className="flex w-full mx-auto mb-5 flex-wrap bg-white rounded-lg overflow-hidden shadow-md p-4"
           >
             <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4 font-bold">
-              {item.name}
+              {item.swimmingpool_name}
             </p>
             <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4">
-              {item.contents}
+              {item.review_content}
             </p>
             <div className="flex-grow"></div>
             <div className="flex justify-between">

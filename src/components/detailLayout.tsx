@@ -9,18 +9,22 @@ import ErrorPage from './error';
 import {fetchReviewData} from '@/data/firestore';
 import {PublicSwimmingPool, ReviewData} from '../lib/types';
 
-export default function Layout({id}: {readonly id: string}) {
+export default function Layout({
+  swimmingpool_id,
+}: {
+  readonly swimmingpool_id: string;
+}) {
   const {data, loading, error} = useData();
   const [reviews, setReviews] = useState<ReviewData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const reviews = await fetchReviewData(id);
+      const reviews = await fetchReviewData(swimmingpool_id);
       setReviews(reviews);
     };
 
     fetchData();
-  }, [id]);
+  }, [swimmingpool_id]);
 
   function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {
     return (
@@ -59,11 +63,13 @@ export default function Layout({id}: {readonly id: string}) {
             className="flex w-full mx-auto mb-5 flex-wrap bg-white rounded-lg overflow-hidden shadow-md p-4"
           >
             <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4">
-              {item.contents}
+              {item.review_content}
             </p>
             <div className="flex-grow"></div>
             <div className="flex justify-between">
-              <p className="text-gray-900 text-sm mr-5">{item.user}</p>
+              <p className="text-gray-900 text-sm mr-5">
+                {item.author_user_id}
+              </p>
               <p className="text-gray-500 text-sm">{item.reg_date}</p>
             </div>
           </div>
@@ -86,7 +92,7 @@ export default function Layout({id}: {readonly id: string}) {
       <section className="text-gray-600 body-font overflow-hidden min-h-max">
         {data.map((item, index) => (
           <div key={index}>
-            {item.id === id && (
+            {item.id === swimmingpool_id && (
               <div className="container px-5 mx-auto max-w-screen-xl">
                 <SwimmingPoolDetail item={item} />
                 <ReviewList reviews={reviews} />

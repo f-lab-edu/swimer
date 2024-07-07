@@ -14,7 +14,6 @@ import {
   setPersistence,
   browserSessionPersistence,
 } from 'firebase/auth';
-import {v4 as uuidv4} from 'uuid';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import {ReviewData} from '../lib/types';
 
@@ -32,7 +31,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
 
-export async function fetchReviewData(id: string = '') {
+export async function fetchReviewData(swimmingpool_id: string = '') {
   const reviewsData: ReviewData[] = [];
   const swimmingpoolData: ReviewData[] = [];
   const totalData: ReviewData[] = [];
@@ -47,13 +46,16 @@ export async function fetchReviewData(id: string = '') {
   }
 
   reviewsQuerySnapshot.forEach(doc => {
-    if (id === '' || doc.data()['id'] === id) {
+    if (
+      swimmingpool_id === '' ||
+      doc.data()['swimmingpool_id'] === swimmingpool_id
+    ) {
       const reviewData = {
-        id: doc.data()['id'],
-        address: doc.data()['address'],
-        contents: doc.data()['content'],
-        name: doc.data()['name'],
-        user: doc.data()['user'],
+        swimmingpool_id: doc.data()['swimmingpool_id'],
+        swimmingpool_address: doc.data()['address'],
+        review_content: doc.data()['review_content'],
+        swimmingpool_name: doc.data()['name'],
+        author_user_id: doc.data()['author_user_id'],
         reg_date: doc.data()['reg_date'],
       };
       reviewsData.push(reviewData);
@@ -62,11 +64,11 @@ export async function fetchReviewData(id: string = '') {
 
   swimmingpoolQuerySnapshot.forEach(doc => {
     const poolData = {
-      id: doc.data()['id'],
-      address: doc.data()['address'],
-      contents: doc.data()['content'],
-      name: doc.data()['name'],
-      user: doc.data()['user'],
+      swimmingpool_id: doc.data()['swimmingpool_id'],
+      swimmingpool_address: doc.data()['address'],
+      review_content: doc.data()['review_content'],
+      swimmingpool_name: doc.data()['name'],
+      author_user_id: doc.data()['author_user_id'],
       reg_date: doc.data()['reg_date'],
     };
     swimmingpoolData.push(poolData);
@@ -74,21 +76,20 @@ export async function fetchReviewData(id: string = '') {
 
   reviewsData.forEach(review => {
     const matchingPool = swimmingpoolData.find(pool => {
-      return pool.id === review.id;
+      return pool.swimmingpool_id === review.swimmingpool_id;
     });
     if (matchingPool) {
       const combinedData = {
-        id: review.id,
-        address: matchingPool.address,
-        contents: review.contents,
-        name: matchingPool.name,
-        user: review.user,
+        swimmingpool_id: review.swimmingpool_id,
+        swimmingpool_address: matchingPool.swimmingpool_address,
+        review_content: review.review_content,
+        swimmingpool_name: matchingPool.swimmingpool_name,
+        author_user_id: review.author_user_id,
         reg_date: review.reg_date,
       };
       totalData.push(combinedData);
     }
   });
-
   return totalData;
 }
 
@@ -116,15 +117,15 @@ export async function addDataToFirestore(data: AddData) {
   try {
     await Promise.all([
       addDoc(collection(db, 'reviews'), {
-        id: data.id,
-        content: data.contents,
-        user: data.user,
+        swimmingpool_id: data.id,
+        review_content: data.contents,
+        author_user_id: data.user,
         reg_date: formattedDate,
       }),
       setDoc(doc(db, 'swimming_pools', data.id), {
-        id: data.id,
-        name: data.name,
-        address: data.address,
+        swimmingpool_id: data.id,
+        swimmingpool_name: data.name,
+        swimmingpool_address: data.address,
         reg_date: formattedDate,
       }),
     ]);
