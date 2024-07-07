@@ -19,11 +19,24 @@ export default function Layout({
 
   useEffect(() => {
     const fetchData = async () => {
-      const reviews = await fetchReviewData(swimmingpool_id);
-      setReviews(reviews);
+      try {
+        const reviews = await fetchReviewData(swimmingpool_id);
+
+        if (reviews) {
+          setReviews(reviews);
+        } else {
+          console.error('Fetch reviews returned undefined');
+        }
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
     };
 
-    fetchData();
+    if (swimmingpool_id) {
+      fetchData();
+    } else {
+      console.error('Invalid swimmingpool_id:', swimmingpool_id);
+    }
   }, [swimmingpool_id]);
 
   function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {

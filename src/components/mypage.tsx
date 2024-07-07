@@ -12,13 +12,20 @@ export default function Layout({children}: {children: React.ReactNode}) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const reviews = await fetchReviewData();
+      try {
+        const reviews = await fetchReviewData();
 
-      const filteredReviews = reviews.filter(
-        review => review.author_user_id === user.displayName,
-      );
-
-      setReviews(filteredReviews);
+        if (reviews) {
+          const filteredReviews = reviews.filter(
+            review => review.author_user_id === user.displayName,
+          );
+          setReviews(filteredReviews);
+        } else {
+          console.error('Fetch reviews returned undefined');
+        }
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
     };
 
     fetchData();
