@@ -9,7 +9,7 @@ import MoveDetailButton from './moveDetailButton';
 import SaveVisitButton from './saveVisitButton';
 import Loading from './loading';
 import ErrorPage from './error';
-import Pagination from './pagination';
+import {Pagination} from '@nextui-org/pagination';
 
 export default function Layout({children}: {children: React.ReactNode}) {
   const {data, loading, error} = useData();
@@ -93,11 +93,15 @@ export default function Layout({children}: {children: React.ReactNode}) {
           <div className="-my-8 divide-y-2 divide-gray-100 border-b-2 border-gray mb-10">
             <SwimmingPoolList />
           </div>
-          <Pagination
-            totalItems={totalItems}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
+          <div className="flex justify-center flex-wrap gap-4 items-center mt-5">
+            <Pagination
+              total={Math.ceil(totalItems / ITEMS_PER_PAGE)}
+              initialPage={currentPage}
+              page={currentPage}
+              onChange={(page: number) => handlePageChange(page)}
+              color="primary"
+            />
+          </div>
         </div>
       </section>
       <Footer />
