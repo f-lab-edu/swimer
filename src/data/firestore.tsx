@@ -5,6 +5,7 @@ import {
   getDocs,
   doc,
   setDoc,
+  addDoc,
 } from 'firebase/firestore';
 import {
   getAuth,
@@ -113,19 +114,20 @@ export async function addDataToFirestore(data: AddData) {
   console.log(formattedDate);
 
   try {
-    await setDoc(doc(db, 'reviews', uuidv4()), {
-      id: data.id,
-      content: data.contents,
-      user: data.user,
-      reg_date: formattedDate,
-    });
-
-    await setDoc(doc(db, 'swimming_pools', data.id), {
-      id: data.id,
-      name: data.name,
-      address: data.address,
-      reg_date: formattedDate,
-    });
+    await Promise.all([
+      addDoc(collection(db, 'reviews'), {
+        id: data.id,
+        content: data.contents,
+        user: data.user,
+        reg_date: formattedDate,
+      }),
+      setDoc(doc(db, 'swimming_pools', data.id), {
+        id: data.id,
+        name: data.name,
+        address: data.address,
+        reg_date: formattedDate,
+      }),
+    ]);
 
     console.log('add 성공');
   } catch (error) {
