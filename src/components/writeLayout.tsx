@@ -23,7 +23,7 @@ export default function Layout({id}: {readonly id: string}) {
       name: selectedItem.FACLT_NM,
       address: selectedItem.SIGUN_NM,
       contents: textareaData,
-      user: user.displayName ?? user.displayName,
+      user: user.displayName ?? '',
     };
 
     addDataToFirestore(addData)
