@@ -62,6 +62,7 @@ export async function fetchReviewData(swimmingpool_id: string = '') {
         review_content: doc.data()['review_content'],
         swimmingpool_name: doc.data()['swimmingpool_name'],
         author_user_id: doc.data()['author_user_id'],
+        author_user_name: doc.data()['author_user_name'],
         reg_date: doc.data()['reg_date'],
       };
       reviewsData.push(reviewData);
@@ -74,6 +75,7 @@ export async function fetchReviewData(swimmingpool_id: string = '') {
         review_content: doc.data()['review_content'],
         swimmingpool_name: doc.data()['swimmingpool_name'],
         author_user_id: doc.data()['author_user_id'],
+        author_user_name: doc.data()['author_user_name'],
         reg_date: doc.data()['reg_date'],
       };
 
@@ -87,6 +89,7 @@ export async function fetchReviewData(swimmingpool_id: string = '') {
           review_content: matchingReview.review_content,
           swimmingpool_name: poolData.swimmingpool_name,
           author_user_id: matchingReview.author_user_id,
+          author_user_name: matchingReview.author_user_name,
           reg_date: matchingReview.reg_date,
         };
         totalData.push(combinedData);
@@ -102,8 +105,9 @@ interface AddData {
   id: string;
   name: string;
   address: string;
-  contents: string;
-  user: string;
+  content: string;
+  user_id: string;
+  user_name: string;
 }
 
 function formatDate(date: Date) {
@@ -123,8 +127,9 @@ export async function addDataToFirestore(data: AddData) {
     await Promise.all([
       addDoc(collection(db, 'reviews'), {
         swimmingpool_id: data.id,
-        review_content: data.contents,
-        author_user_id: data.user,
+        review_content: data.content,
+        author_user_id: data.user_id,
+        author_user_name: data.user_name,
         reg_date: formattedDate,
       }),
       setDoc(doc(db, 'swimming_pools', data.id), {

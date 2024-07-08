@@ -41,7 +41,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
 
         if (reviews) {
           const filteredReviews = reviews.filter(
-            review => review.author_user_id === user.displayName,
+            review => review.author_user_id === user?.uid,
           );
           setReviews(filteredReviews);
         } else {
@@ -53,7 +53,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
     };
 
     fetchData();
-  }, [user.displayName]);
+  }, [user?.uid]);
 
   return (
     <>

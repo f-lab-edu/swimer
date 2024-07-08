@@ -50,7 +50,9 @@ function ReviewList({reviews}: {reviews: ReviewData[]}) {
           </p>
           <div className="flex-grow"></div>
           <div className="flex justify-between">
-            <p className="text-gray-900 text-sm mr-5">{item.author_user_id}</p>
+            <p className="text-gray-900 text-sm mr-5">
+              {item.author_user_name}
+            </p>
             <p className="text-gray-500 text-sm">{item.reg_date}</p>
           </div>
         </div>

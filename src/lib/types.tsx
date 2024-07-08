@@ -15,10 +15,6 @@ export interface ReviewData {
   review_content: string;
   swimmingpool_name: string;
   author_user_id: string;
+  author_user_name: string;
   reg_date: string;
-}
-
-export interface AuthContextType {
-  userEmail: string | null;
-  displayName: string | null;
 }
