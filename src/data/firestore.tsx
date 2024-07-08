@@ -103,7 +103,7 @@ interface AddData {
   name: string;
   address: string;
   contents: string;
-  user: string;
+  user: string | null;
 }
 
 function formatDate(date: Date) {
