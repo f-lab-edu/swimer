@@ -15,6 +15,7 @@ import {
   signInWithEmailAndPassword,
   setPersistence,
   browserSessionPersistence,
+  User,
 } from 'firebase/auth';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import {ReviewData, TotalData} from '../lib/types';
@@ -119,8 +120,7 @@ interface AddData {
   name: string;
   address: string;
   content: string;
-  user_id: string;
-  user_name: string;
+  user_data: User | null;
 }
 
 function formatDate(date: Date) {
@@ -135,14 +135,13 @@ export async function addDataToFirestore(data: AddData) {
   const today = new Date();
   const formattedDate = formatDate(today);
   console.log(formattedDate);
-
   try {
     await Promise.all([
       addDoc(collection(db, 'reviews'), {
         swimmingpool_id: data.id,
         review_content: data.content,
-        author_user_id: data.user_id,
-        author_user_name: data.user_name,
+        author_user_id: data.user_data?.uid,
+        author_user_name: data.user_data?.displayName,
         reg_date: formattedDate,
       }),
       setDoc(doc(db, 'swimming_pools', data.id), {

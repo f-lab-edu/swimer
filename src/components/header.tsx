@@ -2,62 +2,68 @@ import Link from 'next/link';
 import {singOut} from '../data/firestore';
 import {useAuthState} from '../contexts/AuthContext';
 import {User} from 'firebase/auth';
+import {useRouter} from 'next/navigation';
+
+const WithAuthenticatedUserControls = ({user}: {user: User | null}) => {
+  const router = useRouter();
+
+  const handleClick = async () => {
+    await singOut();
+    router.push('/');
+  };
+
+  return (
+    <div>
+      <Link href={'/mypage'} className="mr-3">
+        <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 text-blue-500">
+          {`${user?.displayName}님`}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            className="size-8"
+          >
+            <path
+              className="stroke-2"
+              d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            />
+          </svg>
+        </button>
+      </Link>
+      <button
+        className="text-gray-300 text-sm mt-5 hover:text-gray-500"
+        onClick={handleClick}
+      >
+        로그아웃
+      </button>
+    </div>
+  );
+};
+
+const WithoutAuthenticatedUser = () => {
+  return (
+    <Link href={'/login'} className="mr-3">
+      <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 text-blue-500">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          className="size-8"
+        >
+          <path
+            className="stroke-2"
+            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+          />
+        </svg>
+      </button>
+    </Link>
+  );
+};
 
 export default function Header() {
   const user = useAuthState();
-
-  const handleClick = () => {
-    singOut();
-  };
-
-  const AuthenticatedUserControls = ({user}: {user: User | null}) => {
-    return (
-      <div>
-        {user ? (
-          <Link href={'/mypage'} className="mr-3">
-            <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 text-blue-500">
-              {`${user.email?.split('@')[0]}님`}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="size-8"
-              >
-                <path
-                  className="stroke-2"
-                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                />
-              </svg>
-            </button>
-            <button
-              className="text-gray-300 text-sm mt-5 hover:text-gray-500"
-              onClick={handleClick}
-            >
-              로그아웃
-            </button>
-          </Link>
-        ) : (
-          <Link href={'/login'} className="mr-3">
-            <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 text-blue-500">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="size-8"
-              >
-                <path
-                  className="stroke-2"
-                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                />
-              </svg>
-            </button>
-          </Link>
-        )}
-      </div>
-    );
-  };
 
   return (
     <>
@@ -86,7 +92,11 @@ export default function Header() {
             </span>
           </Link>
           <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
-            <AuthenticatedUserControls user={user} />
+            {user ? (
+              <WithAuthenticatedUserControls user={user} />
+            ) : (
+              <WithoutAuthenticatedUser />
+            )}
           </nav>
         </div>
       </header>
