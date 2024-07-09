@@ -3,10 +3,10 @@ import Footer from './footer';
 import Link from 'next/link';
 import {useEffect, useState} from 'react';
 import {useAuthState} from '../contexts/AuthContext';
-import {ReviewData} from '../lib/types';
-import {fetchReviewData} from '@/data/firestore';
+import {TotalData} from '../lib/types';
+import {fetchReviewByUserId} from '@/data/firestore';
 
-function ReviewList({reviews}: {reviews: ReviewData[]}) {
+function ReviewList({reviews}: {reviews: TotalData[]}) {
   return (
     <div className="md:flex-grow mt-20">
       {reviews.map((item, index) => (
@@ -31,27 +31,20 @@ function ReviewList({reviews}: {reviews: ReviewData[]}) {
 }
 
 export default function Layout({children}: {children: React.ReactNode}) {
-  const [reviews, setReviews] = useState<ReviewData[]>([]);
+  const [reviews, setReviews] = useState<TotalData[]>([]);
   const user = useAuthState();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const reviews = await fetchReviewData();
-
-        if (reviews) {
-          const filteredReviews = reviews.filter(
-            review => review.author_user_id === user?.uid,
-          );
-          setReviews(filteredReviews);
-        } else {
-          console.error('Fetch reviews returned undefined');
+        if (user?.uid) {
+          const reviews = await fetchReviewByUserId(user.uid);
+          setReviews(reviews);
         }
       } catch (error) {
         console.error('Error fetching reviews:', error);
       }
     };
-
     fetchData();
   }, [user?.uid]);
 

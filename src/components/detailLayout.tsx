@@ -6,7 +6,7 @@ import {useState, useEffect} from 'react';
 import useData from '../lib/requestdata';
 import Loading from './loading';
 import ErrorPage from './error';
-import {fetchReviewData} from '@/data/firestore';
+import {fetchReviewsBySwimmingPoolId} from '@/data/firestore';
 import {PublicSwimmingPool, ReviewData} from '../lib/types';
 
 function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {
@@ -72,7 +72,7 @@ export default function Layout({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const reviews = await fetchReviewData(swimmingpool_id);
+        const reviews = await fetchReviewsBySwimmingPoolId(swimmingpool_id);
 
         if (reviews) {
           setReviews(reviews);

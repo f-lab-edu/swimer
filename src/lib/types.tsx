@@ -10,11 +10,20 @@ export interface PublicSwimmingPool {
 }
 
 export interface ReviewData {
-  swimmingpool_id: string;
-  swimmingpool_address: string;
-  review_content: string;
-  swimmingpool_name: string;
   author_user_id: string;
   author_user_name: string;
   reg_date: string;
+  review_content: string;
+  review_id: string;
+  swimmingpool_id: string;
+}
+
+export interface TotalData {
+  reg_date: string;
+  swimmingpool_id: string;
+  swimmingpool_name: string;
+  author_user_id: string;
+  author_user_name: string;
+  review_content: string;
+  review_id: string;
 }

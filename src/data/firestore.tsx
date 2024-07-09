@@ -17,7 +17,7 @@ import {
   browserSessionPersistence,
 } from 'firebase/auth';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import {ReviewData} from '../lib/types';
+import {ReviewData, TotalData} from '../lib/types';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -33,71 +33,84 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
 
-export async function fetchReviewData(swimmingpool_id: string = '') {
-  const reviewsData: ReviewData[] = [];
-  const totalData: ReviewData[] = [];
-
+//mypage페이지 fetch함수
+export async function fetchReviewByUserId(author_user_id: string) {
   try {
-    const reviewsQuery =
-      swimmingpool_id === ''
-        ? collection(db, 'reviews')
-        : query(
-            collection(db, 'reviews'),
-            where('swimmingpool_id', 'in', [swimmingpool_id]),
-          );
-
-    const reviewsQuerySnapshot = await getDocs(reviewsQuery);
-    const swimmingpoolQuerySnapshot = await getDocs(
-      collection(db, 'swimming_pools'),
+    const totalData: TotalData[] = [];
+    // 1. 로그인한 사용자가 작성한 리뷰 읽어오기
+    const reviewsQuery = query(
+      collection(db, 'reviews'),
+      where('author_user_id', '==', author_user_id),
     );
 
-    if (reviewsQuerySnapshot.empty || swimmingpoolQuerySnapshot.empty) {
+    const reviewsQuerySnapshot = await getDocs(reviewsQuery);
+
+    if (reviewsQuerySnapshot.empty) {
       return [];
     }
 
-    reviewsQuerySnapshot.forEach(doc => {
-      const reviewData = {
-        swimmingpool_id: doc.data()['swimmingpool_id'],
-        swimmingpool_address: doc.data()['swimmingpool_address'],
-        review_content: doc.data()['review_content'],
-        swimmingpool_name: doc.data()['swimmingpool_name'],
-        author_user_id: doc.data()['author_user_id'],
-        author_user_name: doc.data()['author_user_name'],
-        reg_date: doc.data()['reg_date'],
-      };
-      reviewsData.push(reviewData);
-    });
+    const reviewsData = reviewsQuerySnapshot.docs.map(
+      doc => doc.data() as ReviewData,
+    );
 
-    swimmingpoolQuerySnapshot.forEach(doc => {
-      const poolData = {
-        swimmingpool_id: doc.data()['swimmingpool_id'],
-        swimmingpool_address: doc.data()['swimmingpool_address'],
-        review_content: doc.data()['review_content'],
-        swimmingpool_name: doc.data()['swimmingpool_name'],
-        author_user_id: doc.data()['author_user_id'],
-        author_user_name: doc.data()['author_user_name'],
-        reg_date: doc.data()['reg_date'],
-      };
+    // 2. reviewsData에 포함된 수영장 id 가져오기
+    const swimmingpool_ids = reviewsData.map(review => review.swimmingpool_id);
 
-      const matchingReview = reviewsData.find(
-        review => review.swimmingpool_id === poolData.swimmingpool_id,
+    // 3. swimming_pools 컬렉션에서 수영장 데이터 가져오기
+    const poolsQuery = query(
+      collection(db, 'swimming_pools'),
+      where('swimmingpool_id', 'in', swimmingpool_ids),
+    );
+
+    const swimmingpoolQuerySnapshot = await getDocs(poolsQuery);
+
+    if (swimmingpoolQuerySnapshot.empty) {
+      return [];
+    }
+
+    const swimmingpoolsData = swimmingpoolQuerySnapshot.docs.map(doc =>
+      doc.data(),
+    );
+
+    // 4. 리뷰 데이터와 수영장 데이터 합치기
+    const combinedData = reviewsData.map(review => {
+      const matchingPool = swimmingpoolsData.find(
+        pool => pool.swimmingpool_id === review.swimmingpool_id,
       );
-      if (matchingReview) {
-        const combinedData = {
-          swimmingpool_id: matchingReview.swimmingpool_id,
-          swimmingpool_address: poolData.swimmingpool_address,
-          review_content: matchingReview.review_content,
-          swimmingpool_name: poolData.swimmingpool_name,
-          author_user_id: matchingReview.author_user_id,
-          author_user_name: matchingReview.author_user_name,
-          reg_date: matchingReview.reg_date,
-        };
-        totalData.push(combinedData);
-      }
+      return {
+        ...review,
+        swimmingpool_name: matchingPool?.swimmingpool_name,
+      };
     });
+
+    totalData.push(...combinedData);
+
     return totalData;
   } catch (error) {
     console.error('Error fetching review data:', error);
+    throw error;
+  }
+}
+
+//detail페이지 fetch함수
+// 수영장 id가 같은 전체 리뷰 가져오기(리뷰 내용,작성자 이름, 등록일자)
+export async function fetchReviewsBySwimmingPoolId(swimmingpool_id: string) {
+  try {
+    const reviewsQuery = query(
+      collection(db, 'reviews'),
+      where('swimmingpool_id', 'in', [swimmingpool_id]),
+    );
+
+    const reviewsQuerySnapshot = await getDocs(reviewsQuery);
+
+    const reviewsData = reviewsQuerySnapshot.docs.map(
+      doc => doc.data() as ReviewData,
+    );
+
+    return reviewsData;
+  } catch (error) {
+    console.error('Error fetching review data:', error);
+    throw error;
   }
 }
 
