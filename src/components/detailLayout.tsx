@@ -100,9 +100,9 @@ export default function Layout({
   }
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <section className="text-gray-600 body-font overflow-hidden min-h-max">
+      <section className="text-gray-600 body-font overflow-hidden min-h-max flex-1">
         {data.map((item, index) => (
           <div key={index}>
             {item.id === swimmingpool_id && (
@@ -115,6 +115,6 @@ export default function Layout({
         ))}
       </section>
       <Footer />
-    </>
+    </div>
   );
 }

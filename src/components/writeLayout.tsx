@@ -46,9 +46,9 @@ export default function Layout({id}: {readonly id: string}) {
   }
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <section className="text-gray-600 body-font relative">
+      <section className="text-gray-600 body-font overflow-hidden min-h-max flex-1">
         {data.map((item, index) => (
           <div key={index}>
             {item.id === id && (
@@ -84,6 +84,6 @@ export default function Layout({id}: {readonly id: string}) {
         ))}
       </section>
       <Footer />
-    </>
+    </div>
   );
 }
