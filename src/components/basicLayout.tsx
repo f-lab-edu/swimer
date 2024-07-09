@@ -27,10 +27,10 @@ export default function Layout({children}: {children: React.ReactNode}) {
     setCurrentPage(pageNumber);
   };
 
-  function SwimmingPoolList() {
+  function SwimmingPoolList({pools}: {pools: PublicSwimmingPool[]}) {
     return (
       <>
-        {currentItems.map((item, index) => (
+        {pools.map((item, index) => (
           <div className="py-8 flex flex-wrap md:flex-nowrap" key={index}>
             <div className="md:flex-grow">
               <h2 className="font-semibold text-2xl text-gray-900 title-font mb-2">
@@ -90,17 +90,23 @@ export default function Layout({children}: {children: React.ReactNode}) {
           </div>
           <br />
           <br />
-          <div className="-my-8 divide-y-2 divide-gray-100 border-b-2 border-gray mb-10">
-            <SwimmingPoolList />
+          <div className="-my-8 divide-y-2 divide-gray-100  mb-10">
+            {totalItems > 0 ? (
+              <SwimmingPoolList pools={currentItems} />
+            ) : (
+              <p className="text-gray-600 text-center">검색 결과가 없습니다.</p>
+            )}
           </div>
           <div className="flex justify-center flex-wrap gap-4 items-center mt-5">
-            <Pagination
-              total={Math.ceil(totalItems / ITEMS_PER_PAGE)}
-              initialPage={currentPage}
-              page={currentPage}
-              onChange={(page: number) => handlePageChange(page)}
-              color="primary"
-            />
+            {totalItems > 0 && (
+              <Pagination
+                total={Math.ceil(totalItems / ITEMS_PER_PAGE)}
+                initialPage={currentPage}
+                page={currentPage}
+                onChange={(page: number) => handlePageChange(page)}
+                color="primary"
+              />
+            )}
           </div>
         </div>
       </section>
