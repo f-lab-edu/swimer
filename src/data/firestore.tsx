@@ -5,14 +5,20 @@ import {
   getDocs,
   doc,
   setDoc,
+  addDoc,
+  query,
+  where,
 } from 'firebase/firestore';
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  setPersistence,
+  browserSessionPersistence,
+  User,
 } from 'firebase/auth';
-import {v4 as uuidv4} from 'uuid';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import {ReviewData, TotalData} from '../lib/types';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -28,42 +34,93 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
 
-export async function fetchReviewData(id: string) {
-  const querySnapShot = await getDocs(collection(db, id));
+//mypage페이지 fetch함수
+export async function fetchReviewByUserId(author_user_id: string) {
+  try {
+    const totalData: TotalData[] = [];
+    // 1. 로그인한 사용자가 작성한 리뷰 읽어오기
+    const reviewsQuery = query(
+      collection(db, 'reviews'),
+      where('author_user_id', '==', author_user_id),
+    );
 
-  if (querySnapShot.empty) {
-    return [];
+    const reviewsQuerySnapshot = await getDocs(reviewsQuery);
+
+    if (reviewsQuerySnapshot.empty) {
+      return [];
+    }
+
+    const reviewsData = reviewsQuerySnapshot.docs.map(
+      doc => doc.data() as ReviewData,
+    );
+
+    // 2. reviewsData에 포함된 수영장 id 가져오기
+    const swimmingpool_ids = reviewsData.map(review => review.swimmingpool_id);
+
+    // 3. swimming_pools 컬렉션에서 수영장 데이터 가져오기
+    const poolsQuery = query(
+      collection(db, 'swimming_pools'),
+      where('swimmingpool_id', 'in', swimmingpool_ids),
+    );
+
+    const swimmingpoolQuerySnapshot = await getDocs(poolsQuery);
+
+    if (swimmingpoolQuerySnapshot.empty) {
+      return [];
+    }
+
+    const swimmingpoolsData = swimmingpoolQuerySnapshot.docs.map(doc =>
+      doc.data(),
+    );
+
+    // 4. 리뷰 데이터와 수영장 데이터 합치기
+    const combinedData = reviewsData.map(review => {
+      const matchingPool = swimmingpoolsData.find(
+        pool => pool.swimmingpool_id === review.swimmingpool_id,
+      );
+      return {
+        ...review,
+        swimmingpool_name: matchingPool?.swimmingpool_name,
+      };
+    });
+
+    totalData.push(...combinedData);
+
+    return totalData;
+  } catch (error) {
+    console.error('Error fetching review data:', error);
+    throw error;
   }
+}
 
-  const fetchedData: {
-    id: string;
-    address: string;
-    contents: string;
-    name: string;
-    user: string;
-    reg_date: string;
-  }[] = [];
+//detail페이지 fetch함수
+// 수영장 id가 같은 전체 리뷰 가져오기(리뷰 내용,작성자 이름, 등록일자)
+export async function fetchReviewsBySwimmingPoolId(swimmingpool_id: string) {
+  try {
+    const reviewsQuery = query(
+      collection(db, 'reviews'),
+      where('swimmingpool_id', 'in', [swimmingpool_id]),
+    );
 
-  querySnapShot.forEach(doc => {
-    const reviewData = {
-      id: doc.data()['id'],
-      address: doc.data()['address'],
-      contents: doc.data()['contents'],
-      name: doc.data()['name'],
-      user: doc.data()['user'],
-      reg_date: doc.data()['reg_date'],
-    };
-    fetchedData.push(reviewData);
-  });
-  return fetchedData;
+    const reviewsQuerySnapshot = await getDocs(reviewsQuery);
+
+    const reviewsData = reviewsQuerySnapshot.docs.map(
+      doc => doc.data() as ReviewData,
+    );
+
+    return reviewsData;
+  } catch (error) {
+    console.error('Error fetching review data:', error);
+    throw error;
+  }
 }
 
 interface AddData {
   id: string;
   name: string;
   address: string;
-  contents: string;
-  user: string;
+  content: string;
+  user_data: User | null;
 }
 
 function formatDate(date: Date) {
@@ -78,16 +135,23 @@ export async function addDataToFirestore(data: AddData) {
   const today = new Date();
   const formattedDate = formatDate(today);
   console.log(formattedDate);
-
   try {
-    await setDoc(doc(db, data.id, uuidv4()), {
-      id: data.id,
-      name: data.name,
-      address: data.address,
-      contents: data.contents,
-      user: data.user,
-      reg_date: formattedDate,
-    });
+    await Promise.all([
+      addDoc(collection(db, 'reviews'), {
+        swimmingpool_id: data.id,
+        review_content: data.content,
+        author_user_id: data.user_data?.uid,
+        author_user_name: data.user_data?.displayName,
+        reg_date: formattedDate,
+      }),
+      setDoc(doc(db, 'swimming_pools', data.id), {
+        swimmingpool_id: data.id,
+        swimmingpool_name: data.name,
+        swimmingpool_address: data.address,
+        reg_date: formattedDate,
+      }),
+    ]);
+
     console.log('add 성공');
   } catch (error) {
     console.error('add 실패: ', error);
@@ -114,6 +178,8 @@ export function signUp(
       }
     });
 }
+
+setPersistence(auth, browserSessionPersistence);
 
 export function signIn(
   email: string,

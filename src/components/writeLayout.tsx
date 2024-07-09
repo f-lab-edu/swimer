@@ -6,11 +6,13 @@ import Loading from './loading';
 import ErrorPage from './error';
 import {addDataToFirestore} from '../data/firestore';
 import {useRouter} from 'next/navigation';
+import {useAuthState} from '../contexts/AuthContext';
 
 export default function Layout({id}: {readonly id: string}) {
   const {data, loading, error} = useData();
   const [textareaData, setTextareaData] = useState<string>('');
   const router = useRouter();
+  const user = useAuthState();
 
   const handleAddData = async () => {
     const selectedItem = data.find(item => item.id === id);
@@ -20,8 +22,8 @@ export default function Layout({id}: {readonly id: string}) {
       id: selectedItem.id,
       name: selectedItem.FACLT_NM,
       address: selectedItem.SIGUN_NM,
-      contents: textareaData,
-      user: 'JM',
+      content: textareaData,
+      user_data: user,
     };
 
     addDataToFirestore(addData)

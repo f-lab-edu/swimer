@@ -1,39 +1,45 @@
 'use client';
 import React, {createContext, useState, useEffect, useContext} from 'react';
 import {authService} from '../data/firestore';
+import {User, updateProfile} from 'firebase/auth';
 
-interface AuthContextType {
-  userEmail: string | null;
-  displayName: string | null;
-}
-
-const AuthStateContext = createContext<AuthContextType>({
-  userEmail: null,
-  displayName: null,
-});
+export const AuthStateContext = createContext<User | null>(null);
 
 export const AuthContextProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [displayName, setDisplayName] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    authService.onAuthStateChanged(user => {
-      if (user) {
-        setUserEmail(user.email);
-        setDisplayName(user.email ? user.email.split('@')[0] : null);
-      } else {
-        setUserEmail(null);
-        setDisplayName(null);
+    authService.onAuthStateChanged(authuser => {
+      if (authuser) {
+        const displayName = authuser.email?.split('@')[0];
+        if (displayName) {
+          updateCurrentUserProfile(displayName);
+        }
       }
+      setUser(authuser);
     });
   }, []);
 
+  const updateCurrentUserProfile = async (newDisplayName: string) => {
+    const currentUser = authService.currentUser;
+    if (currentUser) {
+      try {
+        await updateProfile(currentUser, {
+          displayName: newDisplayName,
+        });
+        console.log('프로필 업데이트 성공');
+      } catch (error) {
+        console.error('프로필 업데이트 실패:', error);
+      }
+    }
+  };
+
   return (
-    <AuthStateContext.Provider value={{userEmail, displayName}}>
+    <AuthStateContext.Provider value={user}>
       {children}
     </AuthStateContext.Provider>
   );

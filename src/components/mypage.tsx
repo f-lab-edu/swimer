@@ -1,8 +1,53 @@
 import Header from './header';
 import Footer from './footer';
 import Link from 'next/link';
+import {useEffect, useState} from 'react';
+import {useAuthState} from '../contexts/AuthContext';
+import {TotalData} from '../lib/types';
+import {fetchReviewByUserId} from '@/data/firestore';
+
+function ReviewList({reviews}: {reviews: TotalData[]}) {
+  return (
+    <div className="md:flex-grow mt-20">
+      {reviews.map((item, index) => (
+        <div
+          key={index}
+          className="flex w-full mx-auto mb-5 flex-wrap bg-white rounded-lg overflow-hidden shadow-md p-4"
+        >
+          <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4 font-bold">
+            {item.swimmingpool_name}
+          </p>
+          <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4">
+            {item.review_content}
+          </p>
+          <div className="flex-grow"></div>
+          <div className="flex justify-between">
+            <p className="text-gray-500 text-sm">{item.reg_date}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function Layout({children}: {children: React.ReactNode}) {
+  const [reviews, setReviews] = useState<TotalData[]>([]);
+  const user = useAuthState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (user?.uid) {
+          const reviews = await fetchReviewByUserId(user.uid);
+          setReviews(reviews);
+        }
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
+    };
+    fetchData();
+  }, [user?.uid]);
+
   return (
     <>
       <Header />
@@ -41,15 +86,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
             </div>
             <div className="-my-7">
               <div className="md:flex-grow mt-20">
-                <div className="flex w-full mx-auto mb-5 flex-wrap bg-white rounded-lg overflow-hidden shadow-md p-4">
-                  <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4">
-                    소사벌 레포츠 타운
-                  </p>
-                  <div className="flex-grow"></div>
-                  <div className="flex justify-between">
-                    <p className="text-gray-500 text-sm">2024-06-28</p>
-                  </div>
-                </div>
+                <ReviewList reviews={reviews} />
               </div>
             </div>
           </div>
