@@ -10,6 +10,7 @@ import SaveVisitButton from '@/components/saveVisitButton';
 import Loading from '@/components/loading';
 import ErrorPage from '@/components/error';
 import {Pagination} from '@nextui-org/pagination';
+import {Card, CardFooter, CardBody} from '@nextui-org/react';
 
 export default function Layout({children}: {children: React.ReactNode}) {
   const {data, loading, error} = useData();
@@ -27,22 +28,26 @@ export default function Layout({children}: {children: React.ReactNode}) {
     setCurrentPage(pageNumber);
   };
 
-  function SwimmingPoolList({pools}: {pools: PublicSwimmingPool[]}) {
+  function SwimmingPoolList() {
     return (
       <>
-        {pools.map((item, index) => (
-          <div className="py-8 flex flex-wrap md:flex-nowrap" key={index}>
-            <div className="md:flex-grow">
-              <h2 className="font-semibold text-2xl text-gray-900 title-font mb-2">
-                {item.FACLT_NM}
-              </h2>
-              <p className="leading-relaxed">{item.SIGUN_NM}</p>
+        {currentItems.map((item, index) => (
+          <Card key={index} className="mb-4 px-4 py-4 h-auto">
+            <CardBody>
+              <div>
+                <h2 className="font-semibold text-2xl text-gray-900 title-font mb-2">
+                  {item.FACLT_NM}
+                </h2>
+                <p className="leading-relaxed">{item.SIGUN_NM}</p>
+              </div>
+              <div className="text-right">
+                <SaveVisitButton id={item.id} />
+              </div>
+            </CardBody>
+            <CardFooter>
               <MoveDetailButton id={item.id} />
-            </div>
-            <div className="flex items-center">
-              <SaveVisitButton id={item.id} />
-            </div>
-          </div>
+            </CardFooter>
+          </Card>
         ))}
       </>
     );
@@ -90,9 +95,9 @@ export default function Layout({children}: {children: React.ReactNode}) {
           </div>
           <br />
           <br />
-          <div className="-my-8 divide-y-2 divide-gray-100  mb-10">
+          <div className="-my-8 divide-y-2 divide-gray-100 mb-10">
             {totalItems > 0 ? (
-              <SwimmingPoolList pools={currentItems} />
+              <SwimmingPoolList />
             ) : (
               <p className="text-gray-600 text-center">검색 결과가 없습니다.</p>
             )}

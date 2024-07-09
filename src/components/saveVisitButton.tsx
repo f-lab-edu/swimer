@@ -6,7 +6,7 @@ export default function SaveVisitButton({id}: {id: string}) {
   return (
     <Link href={`/visit/${id}`}>
       <svg
-        className="text-blue-500 inline-flex items-center size-6"
+        className="text-blue-500 inline-flex items-center size-7"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
