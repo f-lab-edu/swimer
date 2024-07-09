@@ -1,6 +1,6 @@
 'use client';
 
-import Layout from '../../components/mypage';
+import Layout from '@/components/mypage';
 
 export default function Home() {
   return (

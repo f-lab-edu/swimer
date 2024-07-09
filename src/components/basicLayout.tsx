@@ -1,14 +1,14 @@
 'use client';
 
-import Header from './header';
-import Footer from './footer';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 import React, {useState} from 'react';
-import useData from '../lib/requestdata';
-import {PublicSwimmingPool} from '../lib/types';
-import MoveDetailButton from './moveDetailButton';
-import SaveVisitButton from './saveVisitButton';
-import Loading from './loading';
-import ErrorPage from './error';
+import useData from '@/lib/requestdata';
+import {PublicSwimmingPool} from '@/lib/types';
+import MoveDetailButton from '@/components/moveDetailButton';
+import SaveVisitButton from '@/components/saveVisitButton';
+import Loading from '@/components/loading';
+import ErrorPage from '@/components/error';
 import {Pagination} from '@nextui-org/pagination';
 
 export default function Layout({children}: {children: React.ReactNode}) {

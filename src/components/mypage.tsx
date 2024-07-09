@@ -1,9 +1,9 @@
-import Header from './header';
-import Footer from './footer';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 import Link from 'next/link';
 import {useEffect, useState} from 'react';
-import {useAuthState} from '../contexts/AuthContext';
-import {TotalData} from '../lib/types';
+import {useAuthState} from '@/contexts/AuthContext';
+import {TotalData} from '@/lib/types';
 import {fetchReviewByUserId} from '@/data/firestore';
 
 function ReviewList({reviews}: {reviews: TotalData[]}) {

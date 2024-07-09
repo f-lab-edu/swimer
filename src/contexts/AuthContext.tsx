@@ -1,6 +1,6 @@
 'use client';
 import React, {createContext, useState, useEffect, useContext} from 'react';
-import {authService} from '../data/firestore';
+import {authService} from '@/data/firestore';
 import {User, updateProfile} from 'firebase/auth';
 
 export const AuthStateContext = createContext<User | null>(null);

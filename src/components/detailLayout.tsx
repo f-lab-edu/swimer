@@ -1,13 +1,13 @@
 'use client';
 
-import Header from './header';
-import Footer from './footer';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 import {useState, useEffect} from 'react';
-import useData from '../lib/requestdata';
-import Loading from './loading';
-import ErrorPage from './error';
+import useData from '@/lib/requestdata';
+import Loading from '@/components/loading';
+import ErrorPage from '@/components/error';
 import {fetchReviewsBySwimmingPoolId} from '@/data/firestore';
-import {PublicSwimmingPool, ReviewData} from '../lib/types';
+import {PublicSwimmingPool, ReviewData} from '@/lib/types';
 
 function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {
   return (

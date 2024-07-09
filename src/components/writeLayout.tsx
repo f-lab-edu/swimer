@@ -1,12 +1,12 @@
-import Header from './header';
-import Footer from './footer';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 import {useState} from 'react';
-import useData from '../lib/requestdata';
-import Loading from './loading';
-import ErrorPage from './error';
-import {addDataToFirestore} from '../data/firestore';
+import useData from '@/lib/requestdata';
+import Loading from '@/components/loading';
+import ErrorPage from '@/components/error';
+import {addDataToFirestore} from '@/data/firestore';
 import {useRouter} from 'next/navigation';
-import {useAuthState} from '../contexts/AuthContext';
+import {useAuthState} from '@/contexts/AuthContext';
 
 export default function Layout({id}: {readonly id: string}) {
   const {data, loading, error} = useData();

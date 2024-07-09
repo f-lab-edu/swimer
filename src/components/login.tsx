@@ -1,7 +1,7 @@
 'use client';
 
-import Header from './header';
-import Footer from './footer';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 import Link from 'next/link';
 import {FormEvent, useState} from 'react';
 import {useRouter} from 'next/navigation';
