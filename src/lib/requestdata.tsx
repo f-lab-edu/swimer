@@ -11,7 +11,6 @@ const useData = () => {
     'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDAzMzFfMTMw%2FMDAxNzExODU3Nzg0ODgy.7nJOf3Fhe4jEHl7W2FrQb-jrVXnGuf5SWSEAnKrbp3wg.CbxjgFETe3wq7WjaIhfu5KOxleIZ_ut7K7N6jorDHlMg.PNG%2FIMG_8449.PNG&type=sc960_832',
     'https://www.hanamsport.or.kr/wwwroot/ms/img/swimming_pool_01.jpg',
     'https://www.osansports.or.kr/File/Download/c30ead8a7b80c447cf8b9b8ba81ef2f6',
-    'https://www.osansports.or.kr/File/Download/b9fc6cb462a519d14da2d44f09df54d4',
     'https://www.osansports.or.kr/File/Download/cd20a4f6aa0632680a8cf04abe424ef2',
   ];
 
