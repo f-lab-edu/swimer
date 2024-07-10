@@ -12,8 +12,12 @@ import {Spinner} from '@nextui-org/react';
 function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {
   return (
     <div className="py-8 flex flex-wrap md:flex-nowrap">
-      <div className="md:w-64 mr-10 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-        <img src="https://dummyimage.com/720x600" alt="Placeholder Image" />
+      <div className="md:w-64 mr-5 md:mb-0 flex-shrink-0 flex flex-col">
+        <img
+          src={item.imgSource}
+          alt="Swimming Pool Image"
+          className="w-full h-full object-cover rounded-md"
+        />
       </div>
       <div className="md:flex-grow mt-10">
         <h2 className="text-2xl font-medium text-gray-900 title-font mb-20">

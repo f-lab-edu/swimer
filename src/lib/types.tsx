@@ -6,6 +6,7 @@ export interface PublicSwimmingPool {
   HMPG_ADDR: string;
   IRREGULR_RELYSWIMPL_LENG: string;
   IRREGULR_RELYSWIMPL_LANE_CNT: string;
+  imgSource: string;
   [key: string]: string;
 }
 

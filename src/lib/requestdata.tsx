@@ -1,20 +1,19 @@
 import {useState, useEffect} from 'react';
-
-interface PublicSwimmingPool {
-  id: string;
-  FACLT_NM: string;
-  SIGUN_NM: string;
-  CONTCT_NO: string;
-  HMPG_ADDR: string;
-  IRREGULR_RELYSWIMPL_LENG: string;
-  IRREGULR_RELYSWIMPL_LANE_CNT: string;
-  [key: string]: string;
-}
+import {PublicSwimmingPool} from '@/lib/types';
 
 const useData = () => {
   const [data, setData] = useState<PublicSwimmingPool[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const imageSources = [
+    'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDAxMDhfMTU0%2FMDAxNzA0NzAyNzAzODUx.ts8TNgrP_VnFg_Te_tnZfbjfpFRUMNpI225smrVt0hkg.EgkYA7N0JvnyH89FT1d8WE200KPbTBaiXvw2G4Z69sAg.JPEG.jcline77%2FScreenshot%25A3%25DF20240108%25A3%25DF172840%25A3%25DFNAVER.jpg&type=sc960_832',
+    'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDAzMzFfMTMw%2FMDAxNzExODU3Nzg0ODgy.7nJOf3Fhe4jEHl7W2FrQb-jrVXnGuf5SWSEAnKrbp3wg.CbxjgFETe3wq7WjaIhfu5KOxleIZ_ut7K7N6jorDHlMg.PNG%2FIMG_8449.PNG&type=sc960_832',
+    'https://www.hanamsport.or.kr/wwwroot/ms/img/swimming_pool_01.jpg',
+    'https://www.osansports.or.kr/File/Download/c30ead8a7b80c447cf8b9b8ba81ef2f6',
+    'https://www.osansports.or.kr/File/Download/b9fc6cb462a519d14da2d44f09df54d4',
+    'https://www.osansports.or.kr/File/Download/cd20a4f6aa0632680a8cf04abe424ef2',
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +35,7 @@ const useData = () => {
 
         dataArray.forEach((item, index) => {
           item.id = index.toString();
+          item.imgSource = imageSources[index % imageSources.length];
         });
 
         setData(dataArray);
