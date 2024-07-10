@@ -17,6 +17,10 @@ export default function Layout({id}: {readonly id: string}) {
   const handleAddData = async () => {
     const selectedItem = data.find(item => item.id === id);
     if (!selectedItem) return;
+    if (!textareaData) {
+      alert('내용을 입력해주세요.');
+      return;
+    }
 
     const addData = {
       id: selectedItem.id,
