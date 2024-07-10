@@ -4,10 +4,10 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import {useState, useEffect} from 'react';
 import useData from '@/lib/requestdata';
-import Loading from '@/components/loading';
 import ErrorPage from '@/components/error';
 import {fetchReviewsBySwimmingPoolId} from '@/data/firestore';
 import {PublicSwimmingPool, ReviewData} from '@/lib/types';
+import {Spinner} from '@nextui-org/react';
 
 function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {
   return (
@@ -92,7 +92,12 @@ export default function Layout({
   }, [swimmingpool_id]);
 
   if (loading) {
-    return <Loading />;
+    return (
+      <Spinner
+        size="lg"
+        className="flex flex-col items-center justify-center min-h-screen"
+      />
+    );
   }
 
   if (error) {

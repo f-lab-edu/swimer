@@ -2,11 +2,11 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import {useState} from 'react';
 import useData from '@/lib/requestdata';
-import Loading from '@/components/loading';
 import ErrorPage from '@/components/error';
 import {addDataToFirestore} from '@/data/firestore';
 import {useRouter} from 'next/navigation';
 import {useAuthState} from '@/contexts/AuthContext';
+import {Spinner} from '@nextui-org/react';
 
 export default function Layout({id}: {readonly id: string}) {
   const {data, loading, error} = useData();
@@ -42,7 +42,12 @@ export default function Layout({id}: {readonly id: string}) {
   };
 
   if (loading) {
-    return <Loading />;
+    return (
+      <Spinner
+        size="lg"
+        className="flex flex-col items-center justify-center min-h-screen"
+      />
+    );
   }
 
   if (error) {

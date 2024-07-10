@@ -7,10 +7,14 @@ import useData from '@/lib/requestdata';
 import {PublicSwimmingPool} from '@/lib/types';
 import MoveDetailButton from '@/components/moveDetailButton';
 import SaveVisitButton from '@/components/saveVisitButton';
-import Loading from '@/components/loading';
 import ErrorPage from '@/components/error';
-import {Pagination} from '@nextui-org/pagination';
-import {Card, CardFooter, CardBody} from '@nextui-org/react';
+import {
+  Card,
+  CardFooter,
+  CardBody,
+  Spinner,
+  Pagination,
+} from '@nextui-org/react';
 
 export default function Layout({children}: {children: React.ReactNode}) {
   const {data, loading, error} = useData();
@@ -73,7 +77,12 @@ export default function Layout({children}: {children: React.ReactNode}) {
   const currentItems = searchList.slice(indexOfFirstItem, indexOfLastItem);
 
   if (loading) {
-    return <Loading />;
+    return (
+      <Spinner
+        size="lg"
+        className="flex flex-col items-center justify-center min-h-screen"
+      />
+    );
   }
 
   if (error) {

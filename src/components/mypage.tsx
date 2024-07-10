@@ -5,6 +5,7 @@ import {useEffect, useState} from 'react';
 import {useAuthState} from '@/contexts/AuthContext';
 import {TotalData} from '@/lib/types';
 import {fetchReviewByUserId} from '@/data/firestore';
+import {Spinner} from '@nextui-org/react';
 
 function ReviewList({reviews}: {reviews: TotalData[]}) {
   return (
@@ -36,21 +37,34 @@ function ReviewList({reviews}: {reviews: TotalData[]}) {
 
 export default function Layout({children}: {children: React.ReactNode}) {
   const [reviews, setReviews] = useState<TotalData[]>([]);
+  const [loading, setLoading] = useState(true);
   const user = useAuthState();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         if (user?.uid) {
           const reviews = await fetchReviewByUserId(user.uid);
           setReviews(reviews);
         }
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching reviews:', error);
+        setLoading(false);
       }
     };
     fetchData();
   }, [user?.uid]);
+
+  if (loading) {
+    return (
+      <Spinner
+        size="lg"
+        className="flex flex-col items-center justify-center min-h-screen"
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
