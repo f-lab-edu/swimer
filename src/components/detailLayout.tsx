@@ -7,7 +7,7 @@ import useData from '@/lib/requestdata';
 import ErrorPage from '@/components/error';
 import {fetchReviewsBySwimmingPoolId} from '@/data/firestore';
 import {PublicSwimmingPool, ReviewData} from '@/lib/types';
-import {Spinner, Button} from '@nextui-org/react';
+import {Spinner, Button, Link} from '@nextui-org/react';
 
 function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {
   return (
@@ -66,29 +66,73 @@ function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {
   );
 }
 
-function ReviewList({reviews}: {reviews: ReviewData[]}) {
+function ReviewList({
+  reviews,
+  item,
+}: {
+  reviews: ReviewData[];
+  item: PublicSwimmingPool;
+}) {
   return (
     <div className="md:flex-grow mt-20">
-      <p className="text-2xl font-medium text-gray-900 title-font mb-7">
-        수영장 리뷰
-      </p>
-      {reviews.map((item, index) => (
-        <div
-          key={index}
-          className="flex w-full mx-auto mb-5 flex-wrap bg-white rounded-lg overflow-hidden shadow-md p-4"
+      <div className="flex items-center justify-between mb-7">
+        <p className="text-2xl font-medium text-gray-900 title-font">
+          수영장 리뷰
+        </p>
+        <Link
+          href={`/visit/${item.id}`}
+          className="flex items-center text-blue-500 text-sm hover:text-gray-300"
         >
-          <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4">
-            {item.review_content}
-          </p>
-          <div className="flex-grow"></div>
-          <div className="flex justify-between">
-            <p className="text-gray-900 text-sm mr-5">
-              {item.author_user_name}
-            </p>
-            <p className="text-gray-500 text-sm">{item.reg_date}</p>
-          </div>
+          <p className="mr-2">방문한 수영장 인증</p>
+          <svg
+            className="inline-flex h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M9 5l7 7-7 7"
+            ></path>
+          </svg>
+        </Link>
+      </div>
+      {reviews.length === 0 ? (
+        <div className="flex w-full mx-auto justify-center mb-5 flex-wrap bg-gray-100 text-gray-400 rounded-lg overflow-hidden shadow-md p-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            fill="#cfcfcf"
+            className="w-4 h-5 mr-2"
+          >
+            <path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
+          </svg>
+          <p>가장 처음으로 리뷰를 작성해주세요!</p>
         </div>
-      ))}
+      ) : (
+        <>
+          {reviews.map((item, index) => (
+            <div
+              key={index}
+              className="flex w-full mx-auto mb-5 flex-wrap bg-white rounded-lg overflow-hidden shadow-md p-4"
+            >
+              <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4">
+                {item.review_content}
+              </p>
+              <div className="flex-grow"></div>
+              <div className="flex justify-between">
+                <p className="text-gray-900 text-sm mr-5">
+                  {item.author_user_name}
+                </p>
+                <p className="text-gray-500 text-sm">{item.reg_date}</p>
+              </div>
+            </div>
+          ))}
+        </>
+      )}
     </div>
   );
 }
@@ -145,7 +189,7 @@ export default function Layout({
             {item.id === swimmingpool_id && (
               <div className="container px-5 mx-auto max-w-screen-xl">
                 <SwimmingPoolDetail item={item} />
-                <ReviewList reviews={reviews} />
+                <ReviewList reviews={reviews} item={item} />
               </div>
             )}
           </div>
