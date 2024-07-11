@@ -115,6 +115,35 @@ export async function fetchReviewsBySwimmingPoolId(swimmingpool_id: string) {
   }
 }
 
+// 리뷰 많이 작성한 top3출력 - firebase의 쿼리(orderby) 이용해 보려했으나 실패.
+export async function fetchCountUserReview() {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'reviews'));
+
+    const reviewCounts: {authorName: string; reviewCount: number}[] = [];
+
+    querySnapshot.forEach(doc => {
+      const reviews = doc.data();
+      const authorName = reviews.author_user_name;
+
+      const index = reviewCounts.findIndex(
+        item => item.authorName === authorName,
+      );
+
+      if (index !== -1) {
+        reviewCounts[index].reviewCount++;
+      } else {
+        reviewCounts.push({authorName, reviewCount: 1});
+      }
+    });
+
+    return reviewCounts;
+  } catch (error) {
+    console.error('Error fetching review data:', error);
+    throw error;
+  }
+}
+
 interface AddData {
   id: string;
   name: string;
