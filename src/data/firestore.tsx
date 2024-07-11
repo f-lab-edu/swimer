@@ -81,6 +81,7 @@ export async function fetchReviewByUserId(author_user_id: string) {
       return {
         ...review,
         swimmingpool_name: matchingPool?.swimmingpool_name,
+        swimmingpool_address: matchingPool?.swimmingpool_address,
       };
     });
 

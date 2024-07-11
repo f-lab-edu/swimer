@@ -27,4 +27,5 @@ export interface TotalData {
   author_user_name: string;
   review_content: string;
   review_id: string;
+  swimmingpool_address: string;
 }

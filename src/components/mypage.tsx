@@ -154,7 +154,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
                 </Link>
               </div>
               <div className="flex">
-                <KakaoMap />
+                <KakaoMap reviews={reviews} />
               </div>
             </div>
             <div className="-my-7">
