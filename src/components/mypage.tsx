@@ -6,6 +6,7 @@ import {useAuthState} from '@/contexts/AuthContext';
 import {TotalData} from '@/lib/types';
 import {fetchReviewByUserId} from '@/data/firestore';
 import {Avatar, Spinner, Tooltip} from '@nextui-org/react';
+import KakaoMap from './kakaoMap';
 
 function ReviewList({reviews}: {reviews: TotalData[]}) {
   return (
@@ -152,8 +153,8 @@ export default function Layout({children}: {children: React.ReactNode}) {
                   </svg>
                 </Link>
               </div>
-              <div className="py-20 flex justify-center flex-wrap md:flex-nowrap bg-gray-200">
-                <p>버전2에서 지도 진행 예정</p>
+              <div className="flex">
+                <KakaoMap />
               </div>
             </div>
             <div className="-my-7">
