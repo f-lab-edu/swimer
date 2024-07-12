@@ -138,7 +138,12 @@ export async function fetchCountUserReview() {
       }
     });
 
-    return reviewCounts;
+    reviewCounts.sort((a, b) => b.reviewCount - a.reviewCount);
+
+    // 상위 3개 작성자 정보만 선택하여 반환
+    const top3Users = reviewCounts.slice(0, 3);
+
+    return top3Users;
   } catch (error) {
     console.error('Error fetching review data:', error);
     throw error;
