@@ -9,23 +9,27 @@ import {fetchReviewByUserId} from '@/data/firestore';
 function ReviewList({reviews}: {reviews: TotalData[]}) {
   return (
     <div className="md:flex-grow mt-20">
-      {reviews.map((item, index) => (
-        <div
-          key={index}
-          className="flex w-full mx-auto mb-5 flex-wrap bg-white rounded-lg overflow-hidden shadow-md p-4"
-        >
-          <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4 font-bold">
-            {item.swimmingpool_name}
-          </p>
-          <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4">
-            {item.review_content}
-          </p>
-          <div className="flex-grow"></div>
-          <div className="flex justify-between">
-            <p className="text-gray-500 text-sm">{item.reg_date}</p>
+      {reviews.length === 0 ? (
+        <p>아직 등록 된 리뷰가 없어요. 리뷰를 남겨보세요! </p>
+      ) : (
+        reviews.map((item, index) => (
+          <div
+            key={index}
+            className="flex w-full mx-auto mb-5 flex-wrap bg-white rounded-lg overflow-hidden shadow-md p-4"
+          >
+            <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4 font-bold">
+              {item.swimmingpool_name}
+            </p>
+            <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4">
+              {item.review_content}
+            </p>
+            <div className="flex-grow"></div>
+            <div className="flex justify-between">
+              <p className="text-gray-500 text-sm">{item.reg_date}</p>
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 }
