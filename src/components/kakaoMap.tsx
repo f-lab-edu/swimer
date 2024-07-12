@@ -63,10 +63,11 @@ const KakaoMap = ({reviews}: {reviews: TotalData[]}) => {
       {kakaoLoaded && (
         <Map
           center={{
-            lat: address.length > 0 ? address[0].lat : 0,
-            lng: address.length > 0 ? address[0].lng : 0,
+            lat: 37.41511561880415,
+            lng: 127.24369245377136,
           }}
           style={{width: '100%', height: '400px'}}
+          level={11}
         >
           {address.map((address, index) => (
             <MapMarker key={index} position={address} />
