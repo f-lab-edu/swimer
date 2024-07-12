@@ -6,6 +6,7 @@ import {useRouter} from 'next/navigation';
 
 const WithAuthenticatedUserControls = ({user}: {user: User | null}) => {
   const router = useRouter();
+  const userName = user?.uid;
 
   const handleClick = async () => {
     await singOut();
@@ -14,7 +15,7 @@ const WithAuthenticatedUserControls = ({user}: {user: User | null}) => {
 
   return (
     <div>
-      <Link href={'/mypage'} className="mr-3">
+      <Link href={`/mypage/${userName}`} className="mr-3">
         <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0 text-blue-500">
           {`${user?.displayName}님`}
           <svg

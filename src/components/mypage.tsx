@@ -36,18 +36,26 @@ function ReviewList({reviews}: {reviews: TotalData[]}) {
   );
 }
 
-export default function Layout({children}: {children: React.ReactNode}) {
+export default function Layout({
+  children,
+  id,
+}: {
+  children: React.ReactNode;
+  id: string;
+}) {
   const [reviews, setReviews] = useState<TotalData[]>([]);
   const [loading, setLoading] = useState(true);
   const user = useAuthState();
+  const UserUid = id;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        if (user?.uid) {
-          const reviews = await fetchReviewByUserId(user.uid);
+        if (UserUid) {
+          const reviews = await fetchReviewByUserId(UserUid);
           setReviews(reviews);
+          console.log(reviews);
         }
         setLoading(false);
       } catch (error) {
@@ -56,7 +64,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
       }
     };
     fetchData();
-  }, [user?.uid]);
+  }, [UserUid]);
 
   if (loading) {
     return (
@@ -86,16 +94,29 @@ export default function Layout({children}: {children: React.ReactNode}) {
         <div className="container px-5 mx-auto max-w-screen-xl">
           <div className="container px-5 py-24 mx-auto">
             <div className="-my-8 ">
-              <p className="text-sm text-blue-400 mb-3">
-                오수완과 함께 즐거운 수영 생활을 기록해보세요!
-              </p>
+              {user?.uid === UserUid ? (
+                <p className="text-sm text-blue-400 mb-3">
+                  오수완과 함께 즐거운 수영 생활을 기록해보세요!
+                </p>
+              ) : (
+                <p className="text-sm text-blue-400 mb-3">
+                  오수완과 함께 다른 수영인들은 어떤 수영장을 방문했는 지 확인
+                  해 보세요!
+                </p>
+              )}
               <div className="flex items-center mb-4">
                 <Avatar
-                  name={user?.displayName ?? ''}
+                  name={reviews[0].author_user_name ?? ''}
                   size="md"
                   className="mr-2"
                 />
-                <p className="text-lg mr-3">나의 수친자 레벨은?</p>
+                {user?.uid === UserUid ? (
+                  <p className="text-lg mr-3">나의 수친자 레벨은?</p>
+                ) : (
+                  <p className="text-lg mr-3">
+                    {reviews[0].author_user_name} 님의 수친자 레벨
+                  </p>
+                )}
 
                 {totalStar.map((arrayindex, index) => (
                   <Tooltip
@@ -126,32 +147,43 @@ export default function Layout({children}: {children: React.ReactNode}) {
                 ))}
               </div>
               <div className="flex justify-between items-center mb-7 mt-10">
-                <p className="text-2xl font-medium text-gray-900 title-font">
-                  내가 방문한 수영장
-                  <span className="inline-block bg-blue-500 text-white text-lg rounded-2xl px-2 py-0 ml-2">
-                    {reviews.length}
-                  </span>
-                </p>
-                <Link
-                  href={'/'}
-                  className="flex items-center text-blue-500 text-sm mt-3 hover:text-gray-300"
-                >
-                  <p className="mr-2">방문한 수영장 인증</p>
-                  <svg
-                    className="inline-flex h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                {user?.uid === UserUid ? (
+                  <p className="text-2xl font-medium text-gray-900 title-font">
+                    내가 방문한 수영장
+                    <span className="inline-block bg-blue-500 text-white text-lg rounded-2xl px-2 py-0 ml-2">
+                      {reviews.length}
+                    </span>
+                  </p>
+                ) : (
+                  <p className="text-2xl font-medium text-gray-900 title-font">
+                    {reviews[0].author_user_name} 님이 방문한 수영장
+                    <span className="inline-block bg-blue-500 text-white text-lg rounded-2xl px-2 py-0 ml-2">
+                      {reviews.length}
+                    </span>
+                  </p>
+                )}
+                {user?.uid === UserUid && (
+                  <Link
+                    href={'/'}
+                    className="flex items-center text-blue-500 text-sm mt-3 hover:text-gray-300"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 5l7 7-7 7"
-                    ></path>
-                  </svg>
-                </Link>
+                    <p className="mr-2">방문한 수영장 인증</p>
+                    <svg
+                      className="inline-flex h-6 w-6"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 5l7 7-7 7"
+                      ></path>
+                    </svg>
+                  </Link>
+                )}
               </div>
               <div className="flex">
                 <KakaoMap reviews={reviews} />

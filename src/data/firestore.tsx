@@ -121,11 +121,16 @@ export async function fetchCountUserReview() {
   try {
     const querySnapshot = await getDocs(collection(db, 'reviews'));
 
-    const reviewCounts: {authorName: string; reviewCount: number}[] = [];
+    const reviewCounts: {
+      authorUserId: string;
+      authorName: string;
+      reviewCount: number;
+    }[] = [];
 
     querySnapshot.forEach(doc => {
       const reviews = doc.data();
       const authorName = reviews.author_user_name;
+      const authorUserId = reviews.author_user_id;
 
       const index = reviewCounts.findIndex(
         item => item.authorName === authorName,
@@ -134,7 +139,7 @@ export async function fetchCountUserReview() {
       if (index !== -1) {
         reviewCounts[index].reviewCount++;
       } else {
-        reviewCounts.push({authorName, reviewCount: 1});
+        reviewCounts.push({authorUserId, authorName, reviewCount: 1});
       }
     });
 

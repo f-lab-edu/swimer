@@ -22,12 +22,14 @@ import {
   TableCell,
 } from '@nextui-org/react';
 import {fetchCountUserReview} from '@/data/firestore';
+import {useRouter} from 'next/navigation';
 
 function TopReviewer({
   topAuthors,
 }: {
-  topAuthors: {authorName: string; reviewCount: number}[];
+  topAuthors: {authorUserId: string; authorName: string; reviewCount: number}[];
 }) {
+  const router = useRouter();
   const getSvgColor = (index: number): string => {
     switch (index) {
       case 0:
@@ -39,6 +41,11 @@ function TopReviewer({
       default:
         return 'currentColor';
     }
+  };
+
+  const moveMyPage = (e: number) => {
+    const userName = topAuthors[e].authorUserId;
+    router.push(`/mypage/${userName}`);
   };
   return (
     <>
@@ -60,9 +67,15 @@ function TopReviewer({
       <p className="flex justify-center text-sm text-blue-500 mb-5">
         방문한 수영장을 인증해서 오늘 수영 완료를 인증해보세요.
       </p>
-      <Table aria-label="Example static collection table" align="center">
+      <Table
+        aria-label="Example static collection table"
+        align="center"
+        color="default"
+        selectionMode="single"
+        onRowAction={e => moveMyPage(Number(e))}
+      >
         <TableHeader>
-          <TableColumn>NUMBER</TableColumn>
+          <TableColumn>AWARDS</TableColumn>
           <TableColumn>NAME</TableColumn>
           <TableColumn>COUNT</TableColumn>
         </TableHeader>
@@ -128,7 +141,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
   const searchProperties = ['FACLT_NM', 'SIGUN_NM'];
   let searchList: PublicSwimmingPool[] = data;
   const [topAuthors, setTopAuthors] = useState<
-    {authorName: string; reviewCount: number}[]
+    {authorUserId: string; authorName: string; reviewCount: number}[]
   >([]);
 
   const ITEMS_PER_PAGE = 10;
