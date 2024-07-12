@@ -60,7 +60,7 @@ const KakaoMap = ({reviews}: {reviews: TotalData[]}) => {
   return (
     <>
       <Script src={KAKAO_SDK_URL} strategy="beforeInteractive" />
-      {kakaoLoaded && (
+      {kakaoLoaded ? (
         <Map
           center={{
             lat: 37.41511561880415,
@@ -73,6 +73,8 @@ const KakaoMap = ({reviews}: {reviews: TotalData[]}) => {
             <MapMarker key={index} position={address} />
           ))}
         </Map>
+      ) : (
+        <p>지도 준비중...</p>
       )}
     </>
   );
