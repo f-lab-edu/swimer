@@ -200,7 +200,10 @@ export default function Layout({children}: {children: React.ReactNode}) {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <section className="text-gray-600 body-font overflow-hidden">
+      <section className="text-gray-600 px-5 py-24 body-font overflow-hidden">
+        <div className="container px-5 mx-auto max-w-screen-xl">
+          <TopReviewer topAuthors={topAuthors} />
+        </div>
         <div className="container px-5 py-24 mx-auto max-w-screen-xl">
           <p className="flex justify-center font-semibold text-3xl mb-6">
             경기도 모든 수영장 {data.length}
