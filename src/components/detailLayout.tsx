@@ -1,13 +1,13 @@
 'use client';
 
-import Header from './header';
-import Footer from './footer';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 import {useState, useEffect} from 'react';
-import useData from '../lib/requestdata';
-import Loading from './loading';
-import ErrorPage from './error';
+import useData from '@/lib/requestdata';
+import Loading from '@/components/loading';
+import ErrorPage from '@/components/error';
 import {fetchReviewsBySwimmingPoolId} from '@/data/firestore';
-import {PublicSwimmingPool, ReviewData} from '../lib/types';
+import {PublicSwimmingPool, ReviewData} from '@/lib/types';
 
 function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {
   return (
@@ -100,9 +100,9 @@ export default function Layout({
   }
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <section className="text-gray-600 body-font overflow-hidden min-h-max">
+      <section className="text-gray-600 body-font overflow-hidden min-h-max flex-1">
         {data.map((item, index) => (
           <div key={index}>
             {item.id === swimmingpool_id && (
@@ -115,6 +115,6 @@ export default function Layout({
         ))}
       </section>
       <Footer />
-    </>
+    </div>
   );
 }

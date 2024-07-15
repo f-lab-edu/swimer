@@ -18,7 +18,7 @@ import {
   User,
 } from 'firebase/auth';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import {ReviewData, TotalData} from '../lib/types';
+import {ReviewData, TotalData} from '@/lib/types';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,

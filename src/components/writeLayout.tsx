@@ -1,12 +1,12 @@
-import Header from './header';
-import Footer from './footer';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 import {useState} from 'react';
-import useData from '../lib/requestdata';
-import Loading from './loading';
-import ErrorPage from './error';
-import {addDataToFirestore} from '../data/firestore';
+import useData from '@/lib/requestdata';
+import Loading from '@/components/loading';
+import ErrorPage from '@/components/error';
+import {addDataToFirestore} from '@/data/firestore';
 import {useRouter} from 'next/navigation';
-import {useAuthState} from '../contexts/AuthContext';
+import {useAuthState} from '@/contexts/AuthContext';
 
 export default function Layout({id}: {readonly id: string}) {
   const {data, loading, error} = useData();
@@ -17,6 +17,10 @@ export default function Layout({id}: {readonly id: string}) {
   const handleAddData = async () => {
     const selectedItem = data.find(item => item.id === id);
     if (!selectedItem) return;
+    if (!textareaData) {
+      alert('내용을 입력해주세요.');
+      return;
+    }
 
     const addData = {
       id: selectedItem.id,
@@ -46,9 +50,9 @@ export default function Layout({id}: {readonly id: string}) {
   }
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <section className="text-gray-600 body-font relative">
+      <section className="text-gray-600 body-font overflow-hidden min-h-max flex-1">
         {data.map((item, index) => (
           <div key={index}>
             {item.id === id && (
@@ -84,6 +88,6 @@ export default function Layout({id}: {readonly id: string}) {
         ))}
       </section>
       <Footer />
-    </>
+    </div>
   );
 }

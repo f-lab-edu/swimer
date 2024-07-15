@@ -1,31 +1,35 @@
-import Header from './header';
-import Footer from './footer';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
 import Link from 'next/link';
 import {useEffect, useState} from 'react';
-import {useAuthState} from '../contexts/AuthContext';
-import {TotalData} from '../lib/types';
+import {useAuthState} from '@/contexts/AuthContext';
+import {TotalData} from '@/lib/types';
 import {fetchReviewByUserId} from '@/data/firestore';
 
 function ReviewList({reviews}: {reviews: TotalData[]}) {
   return (
     <div className="md:flex-grow mt-20">
-      {reviews.map((item, index) => (
-        <div
-          key={index}
-          className="flex w-full mx-auto mb-5 flex-wrap bg-white rounded-lg overflow-hidden shadow-md p-4"
-        >
-          <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4 font-bold">
-            {item.swimmingpool_name}
-          </p>
-          <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4">
-            {item.review_content}
-          </p>
-          <div className="flex-grow"></div>
-          <div className="flex justify-between">
-            <p className="text-gray-500 text-sm">{item.reg_date}</p>
+      {reviews.length === 0 ? (
+        <p>아직 등록 된 리뷰가 없어요. 리뷰를 남겨보세요! </p>
+      ) : (
+        reviews.map((item, index) => (
+          <div
+            key={index}
+            className="flex w-full mx-auto mb-5 flex-wrap bg-white rounded-lg overflow-hidden shadow-md p-4"
+          >
+            <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4 font-bold">
+              {item.swimmingpool_name}
+            </p>
+            <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4">
+              {item.review_content}
+            </p>
+            <div className="flex-grow"></div>
+            <div className="flex justify-between">
+              <p className="text-gray-500 text-sm">{item.reg_date}</p>
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 }
@@ -49,9 +53,9 @@ export default function Layout({children}: {children: React.ReactNode}) {
   }, [user?.uid]);
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <section className="text-gray-600 body-font overflow-hidden min-h-max">
+      <section className="text-gray-600 body-font overflow-hidden min-h-max flex-1">
         <div className="container px-5 mx-auto max-w-screen-xl">
           <div className="container px-5 py-24 mx-auto">
             <div className="-my-8 divide-y-2 divide-gray-100">
@@ -93,6 +97,6 @@ export default function Layout({children}: {children: React.ReactNode}) {
         </div>
       </section>
       <Footer />
-    </>
+    </div>
   );
 }

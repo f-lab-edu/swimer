@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import {singOut} from '../data/firestore';
-import {useAuthState} from '../contexts/AuthContext';
+import {singOut} from '@/data/firestore';
+import {useAuthState} from '@/contexts/AuthContext';
 import {User} from 'firebase/auth';
 import {useRouter} from 'next/navigation';
 
