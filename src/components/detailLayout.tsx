@@ -72,7 +72,7 @@ function ReviewList({
           수영장 리뷰
         </p>
         <Link
-          href={`/visit/${item.id}`}
+          href={`/visit/${item.swimmingPoolId}`}
           className="flex items-center text-blue-500 text-sm hover:text-gray-300"
         >
           <p className="mr-2">방문한 수영장 인증</p>
@@ -158,7 +158,7 @@ export default function Layout({
       <section className="text-gray-600 body-font overflow-hidden min-h-max flex-1">
         {data.map((item, index) => (
           <div key={index}>
-            {item.id === swimmingpool_id && (
+            {item.swimmingPoolId === swimmingpool_id && (
               <div className="container px-5 mx-auto max-w-screen-xl">
                 <SwimmingPoolDetail item={item} />
                 <ReviewList reviews={reviews} item={item} />

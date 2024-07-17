@@ -33,7 +33,7 @@ const useData = () => {
           responseData.PublicSwimmingPool[1].row;
 
         dataArray.forEach((item, index) => {
-          item.id = index.toString();
+          item.swimmingPoolId = index.toString();
           item.imgSource = imageSources[index % imageSources.length];
         });
 

@@ -92,11 +92,11 @@ function SwimmingPoolList({
               <p className="leading-relaxed">{item.SIGUN_NM}</p>
             </div>
             <div className="text-right">
-              <SaveVisitButton id={item.id} />
+              <SaveVisitButton swimmingPoolId={item.swimmingPoolId} />
             </div>
           </CardBody>
           <CardFooter>
-            <MoveDetailButton id={item.id} />
+            <MoveDetailButton swimmingPoolId={item.swimmingPoolId} />
           </CardFooter>
         </Card>
       ))}

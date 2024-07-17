@@ -1,5 +1,5 @@
 export interface PublicSwimmingPool {
-  id: string;
+  swimmingPoolId: string;
   FACLT_NM: string;
   SIGUN_NM: string;
   CONTCT_NO: string;
