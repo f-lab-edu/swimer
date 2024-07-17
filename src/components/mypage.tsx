@@ -120,9 +120,11 @@ export default function Layout({
                 {Array(5)
                   .fill(0)
                   .map((_, index) => (
-                    <Tooltip content={userLevelLabel(index)} key={index}>
-                      <FishIcon index={index} reviews={reviews.length} />
-                    </Tooltip>
+                    <FishIcon
+                      key={index}
+                      index={index}
+                      reviews={reviews.length}
+                    />
                   ))}
               </div>
               <div className="flex justify-between items-center mb-7 mt-10">
