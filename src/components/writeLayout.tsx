@@ -30,8 +30,8 @@ export default function Layout({
 
     const addData = {
       swimmingPoolId: selectedItem.swimmingPoolId,
-      name: selectedItem.FACLT_NM,
-      address: selectedItem.SIGUN_NM,
+      name: selectedItem.facltName,
+      address: selectedItem.sigunName,
       content: textareaData,
       user_data: user,
     };
@@ -70,10 +70,10 @@ export default function Layout({
               <div className="container px-5 py-20 mx-auto flex justify-center items-center">
                 <div className="lg:w-2/3 md:w-1/2 bg-white rounded-lg p-8 flex flex-col md:relative z-10">
                   <h2 className="text-gray-900 text-lg mb-1 font-medium title-font">
-                    {item.FACLT_NM}
+                    {item.facltName}
                   </h2>
                   <p className="leading-relaxed mb-5 text-gray-600">
-                    {item.SIGUN_NM}
+                    {item.sigunName}
                   </p>
                   <div className="relative mb-4">
                     <textarea

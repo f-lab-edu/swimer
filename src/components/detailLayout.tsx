@@ -23,20 +23,19 @@ function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {
       <div className="md:flex-grow ">
         <div className="mb-5">
           <h2 className="text-2xl font-medium text-gray-900 title-font">
-            {item.FACLT_NM}
+            {item.facltName}
           </h2>
         </div>
         <br />
         <br />
         <div className="flex items-center mt-20 mb-3">
           <LocationDotIcon />
-          <p className="leading-relaxed">{item.SIGUN_NM}</p>
+          <p className="leading-relaxed">{item.sigunName}</p>
         </div>
-        {(item.IRREGULR_RELYSWIMPL_LENG &&
-          item.IRREGULR_RELYSWIMPL_LANE_CNT) !== null ? (
+        {(item.laneLength && item.laneCount) !== null ? (
           <>
             <Button radius="lg" color="primary" size="sm">
-              {item.IRREGULR_RELYSWIMPL_LENG}m
+              {item.laneLength}m
             </Button>
             <Button
               radius="lg"
@@ -45,7 +44,7 @@ function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {
               variant="bordered"
               isIconOnly
             >
-              {item.IRREGULR_RELYSWIMPL_LANE_CNT}
+              {item.laneCount}
             </Button>
           </>
         ) : (

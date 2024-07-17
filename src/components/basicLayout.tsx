@@ -87,9 +87,9 @@ function SwimmingPoolList({
           <CardBody>
             <div>
               <h2 className="font-semibold text-2xl text-gray-900 title-font mb-2">
-                {item.FACLT_NM}
+                {item.facltName}
               </h2>
-              <p className="leading-relaxed">{item.SIGUN_NM}</p>
+              <p className="leading-relaxed">{item.sigunName}</p>
             </div>
             <div className="text-right">
               <SaveVisitButton swimmingPoolId={item.swimmingPoolId} />
@@ -109,7 +109,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchResults, setSearchResults] = useState<PublicSwimmingPool[]>([]);
   const [inputValue, setInputValue] = useState('');
-  const searchProperties = ['FACLT_NM', 'SIGUN_NM'];
+  const searchProperties = ['facltName', 'sigunName'];
   let searchList: PublicSwimmingPool[] = data;
   const [topAuthors, setTopAuthors] = useState<
     {authorUserId: string; authorName: string; reviewCount: number}[]

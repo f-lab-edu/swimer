@@ -16,13 +16,17 @@ const useData = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const requestType = 'Type=json';
-      const requestKey = 'KEY=9e860bd7d3ee4d129d3390efe28a172a';
-      const requestUrl =
-        'https://openapi.gg.go.kr/PublicSwimmingPool?' +
-        requestKey +
-        '&' +
-        requestType;
+      const requestUrl = new URL('https://openapi.gg.go.kr/PublicSwimmingPool');
+      const requestType = 'json';
+      const requestKey = process.env.NEXT_PUBLIC_OPEN_API_KEY;
+
+      if (requestKey) {
+        requestUrl.searchParams.set('KEY', requestKey);
+        requestUrl.searchParams.set('Type', requestType);
+      } else {
+        console.error('NEXT_PUBLIC_OPEN_API_KEY is not defined');
+      }
+
       try {
         const response = await fetch(requestUrl);
         if (!response.ok) {
@@ -35,6 +39,10 @@ const useData = () => {
         dataArray.forEach((item, index) => {
           item.swimmingPoolId = index.toString();
           item.imgSource = imageSources[index % imageSources.length];
+          item.facltName = item.FACLT_NM;
+          item.sigunName = item.SIGUN_NM;
+          item.laneLength = item.IRREGULR_RELYSWIMPL_LENG;
+          item.laneCount = item.IRREGULR_RELYSWIMPL_LANE_CNT;
         });
 
         setData(dataArray);
