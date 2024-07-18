@@ -5,6 +5,7 @@ import Footer from '@/components/footer';
 import {FormEvent, useState} from 'react';
 import {signUp} from '@/data/firestore';
 import {useRouter} from 'next/navigation';
+import Link from 'next/link';
 
 export default function Layout({children}: {children: React.ReactNode}) {
   const [email, setEmail] = useState('');
@@ -43,7 +44,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
               className="flex flex-col w-full"
             >
               <h2 className="text-gray-900 text-lg font-medium title-font mb-5">
-                Sign Up
+                회원가입
               </h2>
               <div className="relative mb-4">
                 <label className="leading-7 text-sm text-gray-600">
@@ -75,11 +76,15 @@ export default function Layout({children}: {children: React.ReactNode}) {
               </div>
               <button
                 type="submit"
-                className="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-300 rounded text-lg"
+                className="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-300 rounded text-lg mb-5"
               >
-                Sign Up
+                등록
               </button>
-              <br></br>
+              <Link href="/login">
+                <p className="text-gray-400 hover:text-gray-600 flex justify-end">
+                  로그인
+                </p>
+              </Link>
             </form>
           </div>
         </div>

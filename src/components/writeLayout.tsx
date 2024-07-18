@@ -2,20 +2,26 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import {useState} from 'react';
 import useData from '@/lib/requestdata';
-import Loading from '@/components/loading';
 import ErrorPage from '@/components/error';
 import {addDataToFirestore} from '@/data/firestore';
 import {useRouter} from 'next/navigation';
 import {useAuthState} from '@/contexts/AuthContext';
+import {Spinner} from '@nextui-org/react';
 
-export default function Layout({id}: {readonly id: string}) {
+export default function Layout({
+  swimmingPoolId,
+}: {
+  readonly swimmingPoolId: string;
+}) {
   const {data, loading, error} = useData();
   const [textareaData, setTextareaData] = useState<string>('');
   const router = useRouter();
   const user = useAuthState();
 
   const handleAddData = async () => {
-    const selectedItem = data.find(item => item.id === id);
+    const selectedItem = data.find(
+      item => item.swimmingPoolId === swimmingPoolId,
+    );
     if (!selectedItem) return;
     if (!textareaData) {
       alert('내용을 입력해주세요.');
@@ -23,9 +29,9 @@ export default function Layout({id}: {readonly id: string}) {
     }
 
     const addData = {
-      id: selectedItem.id,
-      name: selectedItem.FACLT_NM,
-      address: selectedItem.SIGUN_NM,
+      swimmingPoolId: selectedItem.swimmingPoolId,
+      name: selectedItem.facltName,
+      address: selectedItem.sigunName,
       content: textareaData,
       user_data: user,
     };
@@ -42,7 +48,12 @@ export default function Layout({id}: {readonly id: string}) {
   };
 
   if (loading) {
-    return <Loading />;
+    return (
+      <Spinner
+        size="lg"
+        className="flex flex-col items-center justify-center min-h-screen"
+      />
+    );
   }
 
   if (error) {
@@ -55,14 +66,14 @@ export default function Layout({id}: {readonly id: string}) {
       <section className="text-gray-600 body-font overflow-hidden min-h-max flex-1">
         {data.map((item, index) => (
           <div key={index}>
-            {item.id === id && (
+            {item.swimmingPoolId === swimmingPoolId && (
               <div className="container px-5 py-20 mx-auto flex justify-center items-center">
                 <div className="lg:w-2/3 md:w-1/2 bg-white rounded-lg p-8 flex flex-col md:relative z-10">
                   <h2 className="text-gray-900 text-lg mb-1 font-medium title-font">
-                    {item.FACLT_NM}
+                    {item.facltName}
                   </h2>
                   <p className="leading-relaxed mb-5 text-gray-600">
-                    {item.SIGUN_NM}
+                    {item.sigunName}
                   </p>
                   <div className="relative mb-4">
                     <textarea

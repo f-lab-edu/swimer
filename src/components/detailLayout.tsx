@@ -4,59 +4,108 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import {useState, useEffect} from 'react';
 import useData from '@/lib/requestdata';
-import Loading from '@/components/loading';
 import ErrorPage from '@/components/error';
 import {fetchReviewsBySwimmingPoolId} from '@/data/firestore';
 import {PublicSwimmingPool, ReviewData} from '@/lib/types';
+import {Spinner, Button, Link} from '@nextui-org/react';
+import {LocationDotIcon, ArrowIcon, PenIcon} from '@/ui/icon';
 
 function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {
   return (
     <div className="py-8 flex flex-wrap md:flex-nowrap">
-      <div className="md:w-64 mr-10 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-        <img src="https://dummyimage.com/720x600" alt="Placeholder Image" />
+      <div className="md:w-64 h-64 mr-5 md:mb-0 flex-shrink-0 flex flex-col">
+        <img
+          src={item.imgSource}
+          alt="Swimming Pool Image"
+          className="w-full h-full object-cover rounded-md"
+        />
       </div>
-      <div className="md:flex-grow mt-10">
-        <h2 className="text-2xl font-medium text-gray-900 title-font mb-20">
-          {item.FACLT_NM}
-        </h2>
-        <p className="leading-relaxed">{item.SIGUN_NM}</p>
-        <p className="leading-relaxed">{item.CONTCT_NO}</p>
-        <p className="leading-relaxed">{item.HMPG_ADDR}</p>
-        {(item.IRREGULR_RELYSWIMPL_LENG &&
-          item.IRREGULR_RELYSWIMPL_LANE_CNT) !== null && (
-          <p className="leading-relaxed">
-            {item.IRREGULR_RELYSWIMPL_LENG}m *{' '}
-            {item.IRREGULR_RELYSWIMPL_LANE_CNT}
-          </p>
+      <div className="md:flex-grow ">
+        <div className="mb-5">
+          <h2 className="text-2xl font-medium text-gray-900 title-font">
+            {item.facltName}
+          </h2>
+        </div>
+        <br />
+        <br />
+        <div className="flex items-center mt-20 mb-3">
+          <div className="mr-2">
+            <LocationDotIcon />
+          </div>
+          <p className="leading-relaxed">{item.sigunName}</p>
+        </div>
+        {(item.laneLength && item.laneCount) !== null ? (
+          <>
+            <Button radius="lg" color="primary" size="sm">
+              {item.laneLength}m
+            </Button>
+            <Button
+              radius="lg"
+              color="primary"
+              size="sm"
+              variant="bordered"
+              isIconOnly
+            >
+              {item.laneCount}
+            </Button>
+          </>
+        ) : (
+          <Button radius="lg" color="primary" size="sm" variant="bordered">
+            레일 정보를 준비 중이에요
+          </Button>
         )}
       </div>
     </div>
   );
 }
 
-function ReviewList({reviews}: {reviews: ReviewData[]}) {
+function ReviewList({
+  reviews,
+  item,
+}: {
+  reviews: ReviewData[];
+  item: PublicSwimmingPool;
+}) {
   return (
     <div className="md:flex-grow mt-20">
-      <p className="text-2xl font-medium text-gray-900 title-font mb-7">
-        수영장 리뷰
-      </p>
-      {reviews.map((item, index) => (
-        <div
-          key={index}
-          className="flex w-full mx-auto mb-5 flex-wrap bg-white rounded-lg overflow-hidden shadow-md p-4"
+      <div className="flex items-center justify-between mb-7">
+        <p className="text-2xl font-medium text-gray-900 title-font">
+          수영장 리뷰
+        </p>
+        <Link
+          href={`/visit/${item.swimmingPoolId}`}
+          className="flex items-center text-blue-500 text-sm hover:text-gray-300"
         >
-          <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4">
-            {item.review_content}
-          </p>
-          <div className="flex-grow"></div>
-          <div className="flex justify-between">
-            <p className="text-gray-900 text-sm mr-5">
-              {item.author_user_name}
-            </p>
-            <p className="text-gray-500 text-sm">{item.reg_date}</p>
-          </div>
+          <p className="mr-2">방문한 수영장 인증</p>
+          <ArrowIcon />
+        </Link>
+      </div>
+      {reviews.length === 0 ? (
+        <div className="flex w-full mx-auto justify-center mb-5 flex-wrap bg-gray-100 text-gray-400 rounded-lg overflow-hidden shadow-md p-4">
+          <PenIcon className="mr-4" />
+          <p>가장 처음으로 리뷰를 작성해주세요!</p>
         </div>
-      ))}
+      ) : (
+        <>
+          {reviews.map((item, index) => (
+            <div
+              key={index}
+              className="flex w-full mx-auto mb-5 flex-wrap bg-white rounded-lg overflow-hidden shadow-md p-4"
+            >
+              <p className="title-font text-gray-900 lg:w-3/4 lg:mb-0 mb-4">
+                {item.review_content}
+              </p>
+              <div className="flex-grow"></div>
+              <div className="flex justify-between">
+                <p className="text-gray-900 text-sm mr-5">
+                  {item.author_user_name}
+                </p>
+                <p className="text-gray-500 text-sm">{item.reg_date}</p>
+              </div>
+            </div>
+          ))}
+        </>
+      )}
     </div>
   );
 }
@@ -92,7 +141,12 @@ export default function Layout({
   }, [swimmingpool_id]);
 
   if (loading) {
-    return <Loading />;
+    return (
+      <Spinner
+        size="lg"
+        className="flex flex-col items-center justify-center min-h-screen"
+      />
+    );
   }
 
   if (error) {
@@ -105,10 +159,10 @@ export default function Layout({
       <section className="text-gray-600 body-font overflow-hidden min-h-max flex-1">
         {data.map((item, index) => (
           <div key={index}>
-            {item.id === swimmingpool_id && (
+            {item.swimmingPoolId === swimmingpool_id && (
               <div className="container px-5 mx-auto max-w-screen-xl">
                 <SwimmingPoolDetail item={item} />
-                <ReviewList reviews={reviews} />
+                <ReviewList reviews={reviews} item={item} />
               </div>
             )}
           </div>

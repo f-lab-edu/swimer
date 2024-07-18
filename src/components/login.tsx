@@ -29,7 +29,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
               className="flex flex-col w-full"
             >
               <h2 className="text-gray-900 text-lg font-medium title-font mb-5">
-                Sign In
+                로그인
               </h2>
               <div className="relative mb-4">
                 <label className="leading-7 text-sm text-gray-600">
@@ -61,7 +61,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
                 type="submit"
                 className="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-gray-300 rounded text-lg mb-5"
               >
-                Login
+                로그인
               </button>
               <Link href="/signup">
                 <p className="text-gray-400 hover:text-gray-600 flex justify-end">

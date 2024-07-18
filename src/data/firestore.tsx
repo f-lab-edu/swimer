@@ -81,6 +81,7 @@ export async function fetchReviewByUserId(author_user_id: string) {
       return {
         ...review,
         swimmingpool_name: matchingPool?.swimmingpool_name,
+        swimmingpool_address: matchingPool?.swimmingpool_address,
       };
     });
 
@@ -115,8 +116,47 @@ export async function fetchReviewsBySwimmingPoolId(swimmingpool_id: string) {
   }
 }
 
+// 리뷰 많이 작성한 top3출력 - firebase의 쿼리(orderby) 이용해 보려했으나 실패.
+export async function fetchCountUserReview() {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'reviews'));
+
+    const reviewCounts: {
+      authorUserId: string;
+      authorName: string;
+      reviewCount: number;
+    }[] = [];
+
+    querySnapshot.forEach(doc => {
+      const reviews = doc.data();
+      const authorName = reviews.author_user_name;
+      const authorUserId = reviews.author_user_id;
+
+      const index = reviewCounts.findIndex(
+        item => item.authorName === authorName,
+      );
+
+      if (index !== -1) {
+        reviewCounts[index].reviewCount++;
+      } else {
+        reviewCounts.push({authorUserId, authorName, reviewCount: 1});
+      }
+    });
+
+    reviewCounts.sort((a, b) => b.reviewCount - a.reviewCount);
+
+    // 상위 3개 작성자 정보만 선택하여 반환
+    const top3Users = reviewCounts.slice(0, 3);
+
+    return top3Users;
+  } catch (error) {
+    console.error('Error fetching review data:', error);
+    throw error;
+  }
+}
+
 interface AddData {
-  id: string;
+  swimmingPoolId: string;
   name: string;
   address: string;
   content: string;
@@ -138,14 +178,14 @@ export async function addDataToFirestore(data: AddData) {
   try {
     await Promise.all([
       addDoc(collection(db, 'reviews'), {
-        swimmingpool_id: data.id,
+        swimmingpool_id: data.swimmingPoolId,
         review_content: data.content,
         author_user_id: data.user_data?.uid,
         author_user_name: data.user_data?.displayName,
         reg_date: formattedDate,
       }),
-      setDoc(doc(db, 'swimming_pools', data.id), {
-        swimmingpool_id: data.id,
+      setDoc(doc(db, 'swimming_pools', data.swimmingPoolId), {
+        swimmingpool_id: data.swimmingPoolId,
         swimmingpool_name: data.name,
         swimmingpool_address: data.address,
         reg_date: formattedDate,
