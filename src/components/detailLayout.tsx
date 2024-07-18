@@ -29,7 +29,9 @@ function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {
         <br />
         <br />
         <div className="flex items-center mt-20 mb-3">
-          <LocationDotIcon />
+          <div className="mr-2">
+            <LocationDotIcon />
+          </div>
           <p className="leading-relaxed">{item.sigunName}</p>
         </div>
         {(item.laneLength && item.laneCount) !== null ? (
@@ -80,7 +82,7 @@ function ReviewList({
       </div>
       {reviews.length === 0 ? (
         <div className="flex w-full mx-auto justify-center mb-5 flex-wrap bg-gray-100 text-gray-400 rounded-lg overflow-hidden shadow-md p-4">
-          <PenIcon />
+          <PenIcon className="mr-4" />
           <p>가장 처음으로 리뷰를 작성해주세요!</p>
         </div>
       ) : (

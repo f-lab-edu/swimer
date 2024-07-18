@@ -120,11 +120,15 @@ export default function Layout({
                 {Array(5)
                   .fill(0)
                   .map((_, index) => (
-                    <FishIcon
-                      key={index}
-                      index={index}
-                      reviews={reviews.length}
-                    />
+                    <Tooltip content={userLevelLabel(index)} key={index}>
+                      <FishIcon
+                        color={
+                          index < Math.floor(reviews.length / 3)
+                            ? '#1079ea'
+                            : '#CCCCCC'
+                        }
+                      />
+                    </Tooltip>
                   ))}
               </div>
               <div className="flex justify-between items-center mb-7 mt-10">

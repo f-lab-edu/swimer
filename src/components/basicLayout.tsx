@@ -36,6 +36,20 @@ function TopReviewer({
     const userName = topAuthors[e].authorUserId;
     router.push(`/mypage/${userName}`);
   };
+
+  const getSvgColor = (index: number): string => {
+    switch (index) {
+      case 0:
+        return '#FFD43B';
+      case 1:
+        return '#ababab';
+      case 2:
+        return '#cf9b2a';
+      default:
+        return 'currentColor';
+    }
+  };
+
   return (
     <>
       <p className="flex justify-center text-3xl mb-9 font-semibold">
@@ -63,7 +77,10 @@ function TopReviewer({
           {topAuthors.map((author, index) => (
             <TableRow key={index}>
               <TableCell>
-                <AwardsIcon index={index} />
+                <AwardsIcon
+                  color={getSvgColor(index)}
+                  className="inline-flex items-center"
+                />
               </TableCell>
               <TableCell>{author.authorName}</TableCell>
               <TableCell>{author.reviewCount}번 인증</TableCell>
