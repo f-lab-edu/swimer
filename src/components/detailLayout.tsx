@@ -8,7 +8,7 @@ import ErrorPage from '@/components/error';
 import {fetchReviewsBySwimmingPoolId} from '@/data/firestore';
 import {PublicSwimmingPool, ReviewData} from '@/lib/types';
 import {Spinner, Button, Link} from '@nextui-org/react';
-import {LocationDotIcon, ArrowIcon, PenIcon} from '@/ui/icon';
+import {LocationDotIcon, ArrowIcon, PenIcon, PhoneIcon} from '@/ui/icon';
 
 function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {
   return (
@@ -21,18 +21,27 @@ function SwimmingPoolDetail({item}: {item: PublicSwimmingPool}) {
         />
       </div>
       <div className="md:flex-grow ">
-        <div className="mb-5">
+        <div className="mb-10">
           <h2 className="text-2xl font-medium text-gray-900 title-font">
             {item.facltName}
           </h2>
         </div>
         <br />
-        <br />
-        <div className="flex items-center mt-20 mb-3">
+        <div className="flex items-center mt-10 mb-2">
+          <div>
+            <PhoneIcon className="mr-2" />
+          </div>
+          {item.CONTCT_NO !== null ? (
+            <p>{item.CONTCT_NO}</p>
+          ) : (
+            <p className="text-sm">(전화번호를 준비 중이에요)</p>
+          )}
+        </div>
+        <div className="flex items-center mb-8">
           <div className="mr-2">
             <LocationDotIcon />
           </div>
-          <p className="leading-relaxed">{item.sigunName}</p>
+          <p className="leading-relaxed">{item.facltAddr}</p>
         </div>
         {(item.laneLength && item.laneCount) !== null ? (
           <>

@@ -106,7 +106,7 @@ function SwimmingPoolList({
               <h2 className="font-semibold text-2xl text-gray-900 title-font mb-2">
                 {item.facltName}
               </h2>
-              <p className="leading-relaxed">{item.sigunName}</p>
+              <p className="leading-relaxed">{item.facltAddr}</p>
             </div>
             <div className="text-right">
               <SaveVisitButton swimmingPoolId={item.swimmingPoolId} />
@@ -126,7 +126,7 @@ export default function Layout({children}: {children: React.ReactNode}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchResults, setSearchResults] = useState<PublicSwimmingPool[]>([]);
   const [inputValue, setInputValue] = useState('');
-  const searchProperties = ['facltName', 'sigunName'];
+  const searchProperties = ['facltName', 'facltAddr'];
   let searchList: PublicSwimmingPool[] = data;
   const [topAuthors, setTopAuthors] = useState<
     {authorUserId: string; authorName: string; reviewCount: number}[]
@@ -157,8 +157,10 @@ export default function Layout({children}: {children: React.ReactNode}) {
     const allPools = data.map(item => item);
 
     const results = allPools.filter(pool =>
-      searchProperties.some(prop =>
-        pool[prop].replaceAll(' ', '').includes(term.replaceAll(' ', '')),
+      searchProperties.some(
+        prop =>
+          pool[prop] &&
+          pool[prop].replaceAll(' ', '').includes(term.replaceAll(' ', '')),
       ),
     );
     setInputValue(term);
