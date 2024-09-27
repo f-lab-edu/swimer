@@ -97,9 +97,15 @@ function SwimmingPoolList({
 }: {
   currentItems: PublicSwimmingPool[];
 }) {
+  const sortedItems = [...currentItems].sort((a, b) => {
+    if (a.facltName > b.facltName) return 1;
+    if (a.facltName < b.facltName) return -1;
+    return 0;
+  });
+
   return (
     <>
-      {currentItems.map((item, index) => (
+      {sortedItems.map((item, index) => (
         <Card key={index} className="mb-4 px-4 py-4 h-auto">
           <CardBody>
             <div>
