@@ -12,6 +12,7 @@ import {
 import {
   getAuth,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   setPersistence,
   browserSessionPersistence,
@@ -204,10 +205,13 @@ export function signUp(
   router: string[] | AppRouterInstance,
 ) {
   createUserWithEmailAndPassword(auth, email, password)
-    .then(userCredential => {
+    .then(async userCredential => {
       alert('회원 가입 성공');
-      console.log('userCredential: ' + userCredential);
-      router.push('/');
+
+      await sendEmailVerification(userCredential.user);
+      alert('인증 메일이 전송되었습니다. 이메일을 확인해주세요.');
+
+      router.push('/login');
     })
     .catch(error => {
       if (error.code === 'auth/email-already-in-use') {
@@ -227,11 +231,18 @@ export function signIn(
   router: string[] | AppRouterInstance,
 ) {
   signInWithEmailAndPassword(auth, email, password)
-    .then(userCredential => {
+    .then(async userCredential => {
+      const user = userCredential.user;
+
+      if (!user.emailVerified) {
+        alert('이메일 인증이 필요합니다. 인증 메일을 확인해주세요.');
+        // 로그아웃 처리
+        await auth.signOut();
+        return;
+      }
+
       alert('로그인 성공');
       router.push('/');
-      const user = userCredential.user;
-      console.log('user: ' + user);
     })
     .catch(error => {
       console.error('Firebase Error:', error.message);
