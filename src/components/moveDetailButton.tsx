@@ -10,7 +10,7 @@ export default function MoveDetailButton({
 }) {
   return (
     <Link href={`/detail/${swimmingPoolId}`}>
-      <p className="text-blue-500 inline-flex items-center mt-4">
+      <p className="text-blue-500 inline-flex items-center mt-4 hover:text-gray-300">
         Learn More
         <ArrowIcon />
       </p>

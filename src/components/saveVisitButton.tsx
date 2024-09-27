@@ -10,7 +10,7 @@ export default function SaveVisitButton({
 }) {
   return (
     <Link href={`/visit/${swimmingPoolId}`}>
-      <PaperclicpIcon className="inline-flex items-center" />
+      <PaperclicpIcon className="inline-flex items-center hover:text-gray-300" />
     </Link>
   );
 }
