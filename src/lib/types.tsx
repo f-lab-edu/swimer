@@ -1,11 +1,10 @@
 export interface PublicSwimmingPool {
   swimmingPoolId: string;
   FACLT_NM: string;
-  SIGUN_NM: string;
   CONTCT_NO: string;
-  HMPG_ADDR: string;
-  IRREGULR_RELYSWIMPL_LENG: string;
-  IRREGULR_RELYSWIMPL_LANE_CNT: string;
+  REFINE_LOTNO_ADDR: string;
+  REGULR_RELYSWIMPL_LENG: string;
+  REGULR_RELYSWIMPL_LANE_CNT: string;
   imgSource: string;
   [key: string]: string;
 }

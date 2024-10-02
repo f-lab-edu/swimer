@@ -14,6 +14,11 @@ const WithAuthenticatedUserControls = ({user}: {user: User}) => {
     router.push('/');
   };
 
+  if (!user.emailVerified) {
+    singOut();
+    return;
+  }
+
   return (
     <div>
       <Link href={`/mypage/${userUid}`} className="mr-3">

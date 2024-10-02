@@ -31,7 +31,7 @@ export default function Layout({
     const addData = {
       swimmingPoolId: selectedItem.swimmingPoolId,
       name: selectedItem.facltName,
-      address: selectedItem.sigunName,
+      address: selectedItem.facltAddr,
       content: textareaData,
       user_data: user,
     };
@@ -73,7 +73,7 @@ export default function Layout({
                     {item.facltName}
                   </h2>
                   <p className="leading-relaxed mb-5 text-gray-600">
-                    {item.sigunName}
+                    {item.facltAddr}
                   </p>
                   <div className="relative mb-4">
                     <textarea

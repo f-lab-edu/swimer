@@ -16,7 +16,9 @@ const useData = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const requestUrl = new URL('https://openapi.gg.go.kr/PublicSwimmingPool');
+      const requestUrl = new URL(
+        'https://openapi.gg.go.kr/PublicSwimmingPool?pSize=150',
+      );
       const requestType = 'json';
       const requestKey = process.env.NEXT_PUBLIC_OPEN_API_KEY;
 
@@ -41,8 +43,10 @@ const useData = () => {
           item.imgSource = imageSources[index % imageSources.length];
           item.facltName = item.FACLT_NM;
           item.sigunName = item.SIGUN_NM;
-          item.laneLength = item.IRREGULR_RELYSWIMPL_LENG;
-          item.laneCount = item.IRREGULR_RELYSWIMPL_LANE_CNT;
+          item.facltAddr = item.REFINE_LOTNO_ADDR;
+          item.laneLength = item.REGULR_RELYSWIMPL_LENG;
+          item.laneCount = item.REGULR_RELYSWIMPL_LANE_CNT;
+          item.contctNo = item.CONTCT_NO;
         });
 
         setData(dataArray);
